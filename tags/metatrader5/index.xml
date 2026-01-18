@@ -1,37 +1,14 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
-    <title>Vural PEKYILMAZ | Software Engineer</title>
-    <link>https://vuralpekyilmaz.github.io/</link>
-    <description>Recent content on Vural PEKYILMAZ | Software Engineer</description>
+    <title>Metatrader5 on Vural PEKYILMAZ | Software Engineer</title>
+    <link>https://vuralpekyilmaz.github.io/tags/metatrader5/</link>
+    <description>Recent content in Metatrader5 on Vural PEKYILMAZ | Software Engineer</description>
     <generator>Hugo -- 0.154.5</generator>
     <language>en-us</language>
     <copyright>Vural Pekyilmaz</copyright>
-    <lastBuildDate>Sun, 18 Jan 2026 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://vuralpekyilmaz.github.io/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>About</title>
-      <link>https://vuralpekyilmaz.github.io/about/</link>
-      <pubDate>Sun, 18 Jan 2026 00:00:00 +0000</pubDate>
-      <guid>https://vuralpekyilmaz.github.io/about/</guid>
-      <description>&lt;h2 id=&#34;merhaba-&#34;&gt;Merhaba 👋&lt;/h2&gt;
-&lt;p&gt;Ben Vural. Bu siteyi Hugo ve PaperMod ile kurdum.&lt;br&gt;
-Burada projelerimi, notlarımı ve öğrendiklerimi paylaşıyorum.&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;🚀 Teknoloji ve yazılım geliştirme&lt;/li&gt;
-&lt;li&gt;🛠️ Hugo ve statik site optimizasyonu&lt;/li&gt;
-&lt;li&gt;📚 Öğrenme ve paylaşma tutkusu&lt;/li&gt;
-&lt;/ul&gt;</description>
-      <content:encoded><![CDATA[<h2 id="merhaba-">Merhaba 👋</h2>
-<p>Ben Vural. Bu siteyi Hugo ve PaperMod ile kurdum.<br>
-Burada projelerimi, notlarımı ve öğrendiklerimi paylaşıyorum.</p>
-<ul>
-<li>🚀 Teknoloji ve yazılım geliştirme</li>
-<li>🛠️ Hugo ve statik site optimizasyonu</li>
-<li>📚 Öğrenme ve paylaşma tutkusu</li>
-</ul>
-]]></content:encoded>
-    </item>
+    <lastBuildDate>Sat, 10 Jan 2026 17:00:00 +0000</lastBuildDate>
+    <atom:link href="https://vuralpekyilmaz.github.io/tags/metatrader5/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>MetaQuotes New Ultency Matching Engine</title>
       <link>https://vuralpekyilmaz.github.io/posts/2026/benchmark/</link>
@@ -46,20 +23,6 @@ Burada projelerimi, notlarımı ve öğrendiklerimi paylaşıyorum.</p>
 <p>This product is set to enhance the way MetaTrader 5 brokers and liquidity providers connect, addressing long-standing connectivity and execution challenges between them. Ultency aims to set new standards of speed and transparency across the industry.</p>
 <p>CMS Financial, Starprime are only few of the recent brokers integrated and officially announced as approved Liquidity Provider.</p>
 ]]></content:encoded>
-    </item>
-    <item>
-      <title></title>
-      <link>https://vuralpekyilmaz.github.io/archives/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://vuralpekyilmaz.github.io/archives/</guid>
-      <description></description>
-    </item>
-    <item>
-      <title></title>
-      <link>https://vuralpekyilmaz.github.io/search/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://vuralpekyilmaz.github.io/search/</guid>
-      <description></description>
     </item>
   </channel>
 </rss>

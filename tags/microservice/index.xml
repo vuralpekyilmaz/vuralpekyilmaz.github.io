@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Microservice on Vural&#39;ın Software Engineer</title>
+    <link>http://localhost:1313/tags/microservice/</link>
+    <description>Recent content in Microservice on Vural&#39;ın Software Engineer</description>
+    <image>
+      <title>Vural&#39;ın Software Engineer</title>
+      <url>http://localhost:1313/images/papermod-cover.png</url>
+      <link>http://localhost:1313/images/papermod-cover.png</link>
+    </image>
+    <generator>Hugo -- 0.154.5</generator>
+    <language>en-us</language>
+    <copyright>Vural Pekyilmaz</copyright>
+    <lastBuildDate>Sat, 10 Jan 2026 17:00:00 +0000</lastBuildDate>
+    <atom:link href="http://localhost:1313/tags/microservice/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Bun Joins the Microservice Framework Benchmark: Surprisingly Fast JavaScript Runtime</title>
+      <link>http://localhost:1313/posts/2026/benchmark/</link>
+      <pubDate>Sat, 10 Jan 2026 17:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/2026/benchmark/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;Today I&amp;rsquo;m excited to announce the addition of &lt;strong&gt;Bun&lt;/strong&gt; to our &lt;a href=&#34;https://ozkanpakdil.github.io/test-microservice-frameworks/&#34;&gt;microservice framework benchmark suite&lt;/a&gt;. The results are nothing short of remarkable . Bun has proven to be one of the fastest runtimes in our entire test suite, competing directly with Rust frameworks!&lt;/p&gt;
+&lt;h2 id=&#34;what-is-bun&#34;&gt;What is Bun?&lt;/h2&gt;</description>
+      <content:encoded><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>Today I&rsquo;m excited to announce the addition of <strong>Bun</strong> to our <a href="https://ozkanpakdil.github.io/test-microservice-frameworks/">microservice framework benchmark suite</a>. The results are nothing short of remarkable . Bun has proven to be one of the fastest runtimes in our entire test suite, competing directly with Rust frameworks!</p>
+<h2 id="what-is-bun">What is Bun?</h2>
+]]></content:encoded>
+    </item>
+  </channel>
+</rss>

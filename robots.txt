@@ -1,0 +1,9 @@
+# Tüm arama motorları için genel kurallar
+User-agent: *
+Allow: /                     # Yayınlanmış tüm içerikler taranabilir
+Disallow: /drafts/           # Taslak içerikler taranmasın
+Disallow: /admin/            # Yönetim paneli veya özel klasörler taranmasın
+Disallow: /private/          # Gizli içerikler taranmasın
+
+# Sitemap konumu (SEO için kritik)
+Sitemap: https://vuralpekyilmaz.github.io/sitemap.xml
