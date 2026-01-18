@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Vural PEKYILMAZ | Software Engineer</title>
-    <link>https://vuralpekyilmaz.github.io/</link>
+    <link>http://localhost:1313/</link>
     <description>Recent content on Vural PEKYILMAZ | Software Engineer</description>
     <generator>Hugo -- 0.154.5</generator>
     <language>en-us</language>
     <copyright>Vural Pekyilmaz</copyright>
     <lastBuildDate>Sun, 18 Jan 2026 00:00:00 +0000</lastBuildDate>
-    <atom:link href="https://vuralpekyilmaz.github.io/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>About</title>
-      <link>https://vuralpekyilmaz.github.io/about/</link>
+      <link>http://localhost:1313/about/</link>
       <pubDate>Sun, 18 Jan 2026 00:00:00 +0000</pubDate>
-      <guid>https://vuralpekyilmaz.github.io/about/</guid>
+      <guid>http://localhost:1313/about/</guid>
       <description>&lt;h2 id=&#34;merhaba-&#34;&gt;Merhaba 👋&lt;/h2&gt;
 &lt;p&gt;Ben Vural. Bu siteyi Hugo ve PaperMod ile kurdum.&lt;br&gt;
 Burada projelerimi, notlarımı ve öğrendiklerimi paylaşıyorum.&lt;/p&gt;
@@ -34,9 +34,9 @@ Burada projelerimi, notlarımı ve öğrendiklerimi paylaşıyorum.</p>
     </item>
     <item>
       <title>MetaQuotes New Ultency Matching Engine</title>
-      <link>https://vuralpekyilmaz.github.io/posts/2026/benchmark/</link>
+      <link>http://localhost:1313/posts/2026/ultency/</link>
       <pubDate>Sat, 10 Jan 2026 17:00:00 +0000</pubDate>
-      <guid>https://vuralpekyilmaz.github.io/posts/2026/benchmark/</guid>
+      <guid>http://localhost:1313/posts/2026/ultency/</guid>
       <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;MetaQuotes launched the Ultency Matching Engine to provide ultra-low latency execution, instant deployment, seamless integration, and advanced risk management tools.&lt;/p&gt;
 &lt;p&gt;This product is set to enhance the way MetaTrader 5 brokers and liquidity providers connect, addressing long-standing connectivity and execution challenges between them. Ultency aims to set new standards of speed and transparency across the industry.&lt;/p&gt;
@@ -48,17 +48,30 @@ Burada projelerimi, notlarımı ve öğrendiklerimi paylaşıyorum.</p>
 ]]></content:encoded>
     </item>
     <item>
+      <title>What is ECN</title>
+      <link>http://localhost:1313/posts/2026/ecn/</link>
+      <pubDate>Sat, 10 Jan 2026 17:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/2026/ecn/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;ECN forex broker is a financial expert that provides the clients with direct access to other forex participants in the currency market by using electronic communications networks (ECNs).&lt;/p&gt;
+&lt;p&gt;Unlike market makers, which always trade against their clients to make profit, an ECN forex broker only creates opportunities of trading between forex traders.&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>ECN forex broker is a financial expert that provides the clients with direct access to other forex participants in the currency market by using electronic communications networks (ECNs).</p>
+<p>Unlike market makers, which always trade against their clients to make profit, an ECN forex broker only creates opportunities of trading between forex traders.</p>
+]]></content:encoded>
+    </item>
+    <item>
       <title></title>
-      <link>https://vuralpekyilmaz.github.io/archives/</link>
+      <link>http://localhost:1313/archives/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://vuralpekyilmaz.github.io/archives/</guid>
+      <guid>http://localhost:1313/archives/</guid>
       <description></description>
     </item>
     <item>
       <title></title>
-      <link>https://vuralpekyilmaz.github.io/search/</link>
+      <link>http://localhost:1313/search/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://vuralpekyilmaz.github.io/search/</guid>
+      <guid>http://localhost:1313/search/</guid>
       <description></description>
     </item>
   </channel>

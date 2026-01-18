@@ -2,18 +2,18 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
   <channel>
     <title>Posts on Vural PEKYILMAZ | Software Engineer</title>
-    <link>https://vuralpekyilmaz.github.io/posts/</link>
+    <link>http://localhost:1313/posts/</link>
     <description>Recent content in Posts on Vural PEKYILMAZ | Software Engineer</description>
     <generator>Hugo -- 0.154.5</generator>
     <language>en-us</language>
     <copyright>Vural Pekyilmaz</copyright>
     <lastBuildDate>Sat, 10 Jan 2026 17:00:00 +0000</lastBuildDate>
-    <atom:link href="https://vuralpekyilmaz.github.io/posts/index.xml" rel="self" type="application/rss+xml" />
+    <atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>MetaQuotes New Ultency Matching Engine</title>
-      <link>https://vuralpekyilmaz.github.io/posts/2026/benchmark/</link>
+      <link>http://localhost:1313/posts/2026/ultency/</link>
       <pubDate>Sat, 10 Jan 2026 17:00:00 +0000</pubDate>
-      <guid>https://vuralpekyilmaz.github.io/posts/2026/benchmark/</guid>
+      <guid>http://localhost:1313/posts/2026/ultency/</guid>
       <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
 &lt;p&gt;MetaQuotes launched the Ultency Matching Engine to provide ultra-low latency execution, instant deployment, seamless integration, and advanced risk management tools.&lt;/p&gt;
 &lt;p&gt;This product is set to enhance the way MetaTrader 5 brokers and liquidity providers connect, addressing long-standing connectivity and execution challenges between them. Ultency aims to set new standards of speed and transparency across the industry.&lt;/p&gt;
@@ -22,6 +22,19 @@
 <p>MetaQuotes launched the Ultency Matching Engine to provide ultra-low latency execution, instant deployment, seamless integration, and advanced risk management tools.</p>
 <p>This product is set to enhance the way MetaTrader 5 brokers and liquidity providers connect, addressing long-standing connectivity and execution challenges between them. Ultency aims to set new standards of speed and transparency across the industry.</p>
 <p>CMS Financial, Starprime are only few of the recent brokers integrated and officially announced as approved Liquidity Provider.</p>
+]]></content:encoded>
+    </item>
+    <item>
+      <title>What is ECN</title>
+      <link>http://localhost:1313/posts/2026/ecn/</link>
+      <pubDate>Sat, 10 Jan 2026 17:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/posts/2026/ecn/</guid>
+      <description>&lt;h2 id=&#34;introduction&#34;&gt;Introduction&lt;/h2&gt;
+&lt;p&gt;ECN forex broker is a financial expert that provides the clients with direct access to other forex participants in the currency market by using electronic communications networks (ECNs).&lt;/p&gt;
+&lt;p&gt;Unlike market makers, which always trade against their clients to make profit, an ECN forex broker only creates opportunities of trading between forex traders.&lt;/p&gt;</description>
+      <content:encoded><![CDATA[<h2 id="introduction">Introduction</h2>
+<p>ECN forex broker is a financial expert that provides the clients with direct access to other forex participants in the currency market by using electronic communications networks (ECNs).</p>
+<p>Unlike market makers, which always trade against their clients to make profit, an ECN forex broker only creates opportunities of trading between forex traders.</p>
 ]]></content:encoded>
     </item>
   </channel>
