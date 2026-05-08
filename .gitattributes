@@ -1,0 +1,25 @@
+# HTML, CSS, JS dosyaları LF ile tutulacak
+*.html text eol=lf
+*.css text eol=lf
+*.js text eol=lf
+
+# Markdown dosyaları LF
+*.md text eol=lf
+
+# JSON ve YAML dosyaları LF
+*.json text eol=lf
+*.yml text eol=lf
+*.yaml text eol=lf
+
+# TOML dosyaları LF
+*.toml text eol=lf
+
+# Hugo config dosyaları LF
+config.* text eol=lf
+
+# Görsel dosyalar binary olarak tutulur (satır sonu yok)
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.ico binary
+*.svg binary
