@@ -1,1 +1,26 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title>Categories on</title><link>https://vuralpekyilmaz.github.io/en/categories/</link><description>Recent content in Categories on</description><generator>Hugo</generator><language>en</language><lastBuildDate>Fri, 15 May 2026 11:20:00 +0300</lastBuildDate><atom:link href="https://vuralpekyilmaz.github.io/en/categories/index.xml" rel="self" type="application/rss+xml"/><item><title>MetaTrader5</title><link>https://vuralpekyilmaz.github.io/en/categories/metatrader5/</link><pubDate>Fri, 15 May 2026 11:20:00 +0300</pubDate><guid>https://vuralpekyilmaz.github.io/en/categories/metatrader5/</guid><description/></item><item><title>MQL5</title><link>https://vuralpekyilmaz.github.io/en/categories/mql5/</link><pubDate>Fri, 15 May 2026 11:20:00 +0300</pubDate><guid>https://vuralpekyilmaz.github.io/en/categories/mql5/</guid><description/></item></channel></rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title>Categories on </title>
+    <link>http://localhost:1313/en/categories/</link>
+    <description>Recent content in Categories on </description>
+    <generator>Hugo</generator>
+    <language>en</language>
+    <lastBuildDate>Fri, 15 May 2026 11:20:00 +0300</lastBuildDate>
+    <atom:link href="http://localhost:1313/en/categories/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>MetaTrader5</title>
+      <link>http://localhost:1313/en/categories/metatrader5/</link>
+      <pubDate>Fri, 15 May 2026 11:20:00 +0300</pubDate>
+      <guid>http://localhost:1313/en/categories/metatrader5/</guid>
+      <description></description>
+    </item>
+    <item>
+      <title>MQL5</title>
+      <link>http://localhost:1313/en/categories/mql5/</link>
+      <pubDate>Fri, 15 May 2026 11:20:00 +0300</pubDate>
+      <guid>http://localhost:1313/en/categories/mql5/</guid>
+      <description></description>
+    </item>
+  </channel>
+</rss>

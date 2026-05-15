@@ -1,11 +1,57 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title/><link>https://vuralpekyilmaz.github.io/ru/</link><description>Recent content on</description><generator>Hugo</generator><language>ru</language><lastBuildDate>Thu, 14 May 2026 11:20:00 +0300</lastBuildDate><atom:link href="https://vuralpekyilmaz.github.io/ru/index.xml" rel="self" type="application/rss+xml"/><item><title>Калькулятор позиций по счёту USDTRY</title><link>https://vuralpekyilmaz.github.io/ru/posts/account-position-calculator-usdtry/</link><pubDate>Thu, 14 May 2026 11:20:00 +0300</pubDate><guid>https://vuralpekyilmaz.github.io/ru/posts/account-position-calculator-usdtry/</guid><description>Для инвесторов, работающих с кредитным плечом на финансовых рынках, крайне важно корректно отражать позиции по счёту.</description></item><item><title>Вторая статья</title><link>https://vuralpekyilmaz.github.io/ru/posts/second-post/</link><pubDate>Mon, 11 May 2026 11:30:00 +0300</pubDate><guid>https://vuralpekyilmaz.github.io/ru/posts/second-post/</guid><description>&lt;p&gt;Снова здравствуйте! Это моя вторая русская демо‑статья.&lt;br&gt;
-Я продолжаю тестировать многоязычную конфигурацию Hugo и тему PaperMod.&lt;/p&gt;</description></item><item><title>Первая статья</title><link>https://vuralpekyilmaz.github.io/ru/posts/first-post/</link><pubDate>Sun, 10 May 2026 11:30:00 +0300</pubDate><guid>https://vuralpekyilmaz.github.io/ru/posts/first-post/</guid><description>&lt;p&gt;Привет! Это моя первая русская демо‑статья.&lt;br&gt;
-Здесь я начинаю экспериментировать с многоязычной настройкой Hugo и темой PaperMod.&lt;/p&gt;</description></item><item><title>Главная</title><link>https://vuralpekyilmaz.github.io/ru/home/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://vuralpekyilmaz.github.io/ru/home/</guid><description>&lt;p&gt;Добро пожаловать на русскую версию сайта!&lt;br&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
+  <channel>
+    <title></title>
+    <link>http://localhost:1313/ru/</link>
+    <description>Recent content on </description>
+    <generator>Hugo</generator>
+    <language>ru</language>
+    <lastBuildDate>Thu, 14 May 2026 11:20:00 +0300</lastBuildDate>
+    <atom:link href="http://localhost:1313/ru/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Калькулятор позиций по счёту USDTRY</title>
+      <link>http://localhost:1313/ru/posts/account-position-calculator-usdtry/</link>
+      <pubDate>Thu, 14 May 2026 11:20:00 +0300</pubDate>
+      <guid>http://localhost:1313/ru/posts/account-position-calculator-usdtry/</guid>
+      <description>Для инвесторов, работающих с кредитным плечом на финансовых рынках, крайне важно корректно отражать позиции по счёту.</description>
+    </item>
+    <item>
+      <title>Вторая статья</title>
+      <link>http://localhost:1313/ru/posts/second-post/</link>
+      <pubDate>Mon, 11 May 2026 11:30:00 +0300</pubDate>
+      <guid>http://localhost:1313/ru/posts/second-post/</guid>
+      <description>&lt;p&gt;Снова здравствуйте! Это моя вторая русская демо‑статья.&lt;br&gt;
+Я продолжаю тестировать многоязычную конфигурацию Hugo и тему PaperMod.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Первая статья</title>
+      <link>http://localhost:1313/ru/posts/first-post/</link>
+      <pubDate>Sun, 10 May 2026 11:30:00 +0300</pubDate>
+      <guid>http://localhost:1313/ru/posts/first-post/</guid>
+      <description>&lt;p&gt;Привет! Это моя первая русская демо‑статья.&lt;br&gt;
+Здесь я начинаю экспериментировать с многоязычной настройкой Hugo и темой PaperMod.&lt;/p&gt;</description>
+    </item>
+    <item>
+      <title>Главная</title>
+      <link>http://localhost:1313/ru/home/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ru/home/</guid>
+      <description>&lt;p&gt;Добро пожаловать на русскую версию сайта!&lt;br&gt;
 Здесь будут отображаться последние статьи и обновления.&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;📖 Читайте новые публикации&lt;/li&gt;
 &lt;li&gt;🌐 Переключайтесь между языками&lt;/li&gt;
 &lt;li&gt;✨ Следите за обновлениями&lt;/li&gt;
-&lt;/ul&gt;</description></item><item><title>Обо мне</title><link>https://vuralpekyilmaz.github.io/ru/about/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://vuralpekyilmaz.github.io/ru/about/</guid><description>&lt;p&gt;Я пишу на MQL5 и работаю в MetaTrader 5, специализируясь на алгоритмической торговле и разработке автоматизированных стратегий.&lt;br&gt;
+&lt;/ul&gt;</description>
+    </item>
+    <item>
+      <title>Обо мне</title>
+      <link>http://localhost:1313/ru/about/</link>
+      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
+      <guid>http://localhost:1313/ru/about/</guid>
+      <description>&lt;p&gt;Я пишу на MQL5 и работаю в MetaTrader 5, специализируясь на алгоритмической торговле и разработке автоматизированных стратегий.&lt;br&gt;
 Моя экспертиза включает создание и внедрение советников (Expert Advisors, EA), пользовательских индикаторов и торговых скриптов, адаптированных к различным рыночным условиям.&lt;/p&gt;
-&lt;p&gt;У меня большой опыт в расчетах маржи и управления рисками, в процессах исполнения ордеров и бэктестинге, что обеспечивает точность и оптимизацию торговой производительности.&lt;/p&gt;</description></item></channel></rss>
+&lt;p&gt;У меня большой опыт в расчетах маржи и управления рисками, в процессах исполнения ордеров и бэктестинге, что обеспечивает точность и оптимизацию торговой производительности.&lt;/p&gt;</description>
+    </item>
+  </channel>
+</rss>
