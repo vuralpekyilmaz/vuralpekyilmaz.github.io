@@ -1,0 +1,38 @@
+/* =========================
+   EN SECTION CUSTOM STYLES
+   ========================= */
+
+/* Light mode - English pages */
+body.en[data-theme=light] .post-entry {
+    background: #f9f9f9;   /* açık gri arka plan */
+    color: #222;           /* koyu gri yazı */
+}
+body.en[data-theme=light] .entry-header h2 {
+    color: #0055aa;        /* başlık mavi */
+}
+body.en[data-theme=light] .entry-content {
+    font-size: 15px;
+    line-height: 1.6;
+    color: #333;
+}
+
+/* Dark mode - English pages */
+body.en[data-theme=dark] .post-entry {
+    background: #1e1e1e;   /* koyu gri arka plan */
+    color: #ddd;           /* açık gri yazı */
+}
+body.en[data-theme=dark] .entry-header h2 {
+    font-size: 22px;
+    line-height: 1.4;
+    color: #66ccff;        /* başlık açık mavi */
+}
+body.en[data-theme=dark] .entry-content {
+    margin: 8px 0;
+    color: #ccc;           /* içerik açık gri */
+    font-size: 14px;
+    line-height: 1.6;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3; /* sadece 3 satır göster */
+}
