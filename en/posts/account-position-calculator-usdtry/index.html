@@ -1,459 +1,914 @@
-<!doctype html><html lang=en dir=auto data-theme=auto><head><meta charset=utf-8><meta http-equiv=X-UA-Compatible content="IE=edge"><meta name=viewport content="width=device-width,initial-scale=1,shrink-to-fit=no"><meta name=robots content="index, follow"><title>Account Position Calculator USDTRY |</title><meta name=keywords content="Metatrader5,MQL5,Trading,USDTRY"><meta name=description content="In financial markets, for investors engaged in leveraged trading, accurately reporting account positions is of critical importance."><meta name=author content><link rel=canonical href=https://vuralpekyilmaz.github.io/en/posts/account-position-calculator-usdtry/><link href=https://vuralpekyilmaz.github.io/assets/css/stylesheet.7efb8adecc1429c8e3860aab6b3ca98065a2d658c76e8cb45df35e7aab9f0527.css rel="preload stylesheet" as=style><link rel=icon href=https://vuralpekyilmaz.github.io/favicon.ico><link rel=icon type=image/png sizes=16x16 href=https://vuralpekyilmaz.github.io/favicon-16x16.png><link rel=icon type=image/png sizes=32x32 href=https://vuralpekyilmaz.github.io/favicon-32x32.png><link rel=apple-touch-icon href=https://vuralpekyilmaz.github.io/apple-touch-icon.png><link rel=mask-icon href=https://vuralpekyilmaz.github.io/safari-pinned-tab.svg><meta name=theme-color content="#2e2e33"><meta name=msapplication-TileColor content="#2e2e33"><link rel=alternate hreflang=en href=https://vuralpekyilmaz.github.io/en/posts/account-position-calculator-usdtry/><link rel=alternate hreflang=ru href=https://vuralpekyilmaz.github.io/ru/posts/account-position-calculator-usdtry/><noscript><style>#theme-toggle,.top-link{display:none}</style><style>@media(prefers-color-scheme:dark){:root{--theme:rgb(29, 30, 32);--entry:rgb(46, 46, 51);--primary:rgb(218, 218, 219);--secondary:rgb(155, 156, 157);--tertiary:rgb(65, 66, 68);--content:rgb(196, 196, 197);--code-block-bg:rgb(46, 46, 51);--code-bg:rgb(55, 56, 62);--border:rgb(51, 51, 51);color-scheme:dark}.list{background:var(--theme)}.toc{background:var(--entry)}}</style></noscript><script>localStorage.getItem("pref-theme")==="dark"?document.querySelector("html").dataset.theme="dark":localStorage.getItem("pref-theme")==="light"?document.querySelector("html").dataset.theme="light":window.matchMedia("(prefers-color-scheme: dark)").matches?document.querySelector("html").dataset.theme="dark":document.querySelector("html").dataset.theme="light"</script><meta property="og:url" content="https://vuralpekyilmaz.github.io/en/posts/account-position-calculator-usdtry/"><meta property="og:title" content="Account Position Calculator USDTRY"><meta property="og:description" content="In financial markets, for investors engaged in leveraged trading, accurately reporting account positions is of critical importance."><meta property="og:locale" content="en"><meta property="og:type" content="article"><meta property="article:section" content="posts"><meta property="article:published_time" content="2026-05-15T11:20:00+03:00"><meta property="article:modified_time" content="2026-05-15T11:20:00+03:00"><meta property="article:tag" content="Metatrader5"><meta property="article:tag" content="MQL5"><meta property="article:tag" content="Trading"><meta property="article:tag" content="USDTRY"><meta property="og:image" content="https://vuralpekyilmaz.github.io/images/terminal-black.png"><meta name=twitter:card content="summary_large_image"><meta name=twitter:image content="https://vuralpekyilmaz.github.io/images/terminal-black.png"><meta name=twitter:title content="Account Position Calculator USDTRY"><meta name=twitter:description content="In financial markets, for investors engaged in leveraged trading, accurately reporting account positions is of critical importance."><meta name=twitter:site content="@thejvmbender"><script type=application/ld+json>{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Article","item":"https://vuralpekyilmaz.github.io/en/posts/"},{"@type":"ListItem","position":2,"name":"Account Position Calculator USDTRY","item":"https://vuralpekyilmaz.github.io/en/posts/account-position-calculator-usdtry/"}]}</script><script type=application/ld+json>{"@context":"https://schema.org","@type":"BlogPosting","headline":"Account Position Calculator USDTRY","name":"Account Position Calculator USDTRY","description":"In financial markets, for investors engaged in leveraged trading, accurately reporting account positions is of critical importance.","keywords":["Metatrader5","MQL5","Trading","USDTRY"],"articleBody":"Introduction Especially in highly volatile pairs such as USDTRY, incorrectly calculated values of Equity, Margin, Free Margin, and Margin Level can mislead investors and weaken risk management.\nThis article addresses the development of an Account Position Calculator to help investors transparently and reliably track their positions.\nCalculates position size, margin, and floating P/L using precise formulas.\nAutomatically reports Equity, Free Margin, and Margin Level values.\nDisplays outputs in both USD and TRY, enabling dual‑currency tracking.\nThanks to its modular code structure, it can be easily applied to both BUY and SELL scenarios.\nAdditionally, Stop Out Level logic is integrated, providing investors with clear information about risk thresholds.\nLet’s create a new class CAccountPositionCalculator.\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 //+------------------------------------------------------------------+ //| Copyright 2026, MetaQuotes Ltd. | //| https://www.mql5.com | //| PositionSizeCalculatorUSDTRY.mq5 | //+------------------------------------------------------------------+ //--- Helper function: draw text on chart void DrawLabel(string name,int x,int y,string text,int fontSize,color clr) { if(ObjectFind(0,name) == -1) ObjectCreate(0,name,OBJ_LABEL,0,0,0); ObjectSetInteger(0,name,OBJPROP_CORNER,CORNER_LEFT_UPPER); ObjectSetInteger(0,name,OBJPROP_XDISTANCE,x); ObjectSetInteger(0,name,OBJPROP_YDISTANCE,y); ObjectSetInteger(0,name,OBJPROP_FONTSIZE,fontSize); ObjectSetInteger(0,name,OBJPROP_COLOR,clr); ObjectSetString(0,name,OBJPROP_TEXT,text); } //--- Helper function: background for report block void DrawBackground(string name,int x,int y,int width,int height,color clr) { if(ObjectFind(0,name) == -1) ObjectCreate(0,name,OBJ_RECTANGLE_LABEL,0,0,0); ObjectSetInteger(0,name,OBJPROP_CORNER,CORNER_LEFT_UPPER); ObjectSetInteger(0,name,OBJPROP_XDISTANCE,x); ObjectSetInteger(0,name,OBJPROP_YDISTANCE,y); ObjectSetInteger(0,name,OBJPROP_XSIZE,width); ObjectSetInteger(0,name,OBJPROP_YSIZE,height); ObjectSetInteger(0,name,OBJPROP_BGCOLOR,clr); ObjectSetInteger(0,name,OBJPROP_COLOR,clr); ObjectSetInteger(0,name,OBJPROP_STYLE,STYLE_SOLID); ObjectSetInteger(0,name,OBJPROP_WIDTH,0); ObjectSetString(0,name,OBJPROP_TEXT,\"\"); } //--- Position Calculator class CAccountPositionCalculator { private: // Account information double m_balance; double m_equity; double m_contractSize; double m_leverage; // Order information string m_orderType; string m_symbol; double m_lot; double m_openPrice; double m_currentPrice; double m_stopLoss; double m_takeProfit; double m_commission; double m_swap; public: CAccountPositionCalculator( double bal, double cSize, double lev, string oType, string sym, double l, double oPrice, double cPrice, double sL, double tP, double comm, double sw ) { m_balance = bal; m_equity = bal; m_contractSize = cSize; m_leverage = lev; m_orderType = oType; m_symbol = sym; m_lot = l; m_openPrice = oPrice; m_currentPrice = cPrice; m_stopLoss = sL; m_takeProfit = tP; m_commission = comm; m_swap = sw; } void Report() { // 1 pip = 0.0001 (for 4-digit pairs like USDTRY) double pipSize = 0.0001; // Broker Stop Out Level (%10) double stopOutLevel = 10; // Floating P/L in TRY double floatingPL_TRY = 0.0; if (m_orderType == \"BUY\") { floatingPL_TRY = (m_currentPrice - m_openPrice) * m_contractSize * m_lot; } else if (m_orderType == \"SELL\") { floatingPL_TRY = (m_openPrice - m_currentPrice) * m_contractSize * m_lot; } // Floating P/L in USD double floatingPL_USD = floatingPL_TRY / m_currentPrice; // Equity = Balance + Floating P/L - Commission + Swap m_equity = m_balance + floatingPL_USD - m_commission + m_swap; // Margin in USD double marginUSD = (m_contractSize * m_lot) / m_leverage; // Free Margin double freeMargin = m_equity - marginUSD; // Margin Level double marginLevel = marginUSD \u003e 0 ? (m_equity / marginUSD) * 100 : 0; // Spread Cost double spreadCost = 0; double spreadCost_TRY = 0; if (m_orderType == \"BUY\") { spreadCost = (m_currentPrice - m_openPrice); } else if (m_orderType == \"SELL\") { spreadCost = (m_openPrice - m_currentPrice); } //Pip Size double pips = spreadCost / pipSize; // Spread Cost in TRY spreadCost_TRY = spreadCost * m_contractSize * m_lot; //Print(\"spreadCost : \", spreadCost , \" - m_contractSize : \", m_contractSize, \" - m_lot : \", m_lot); //Print(\"spreadCost_TRY : \", spreadCost_TRY); // Profit in USD double spreadCost_USD = spreadCost_TRY / m_currentPrice; // Stop Out Equity Threshold double stopOutEquity = (marginUSD * stopOutLevel) / 100; if (m_equity \u003c= stopOutEquity) { Print(\"️STOP OUT RISK\"); } // === Output in Experts === Print(\"=== Position Report (USDTRY v1.0.2-beta) ===\"); Print(\"Symbol : \", m_symbol, \" - Type : \", m_orderType ,\" - Size : \", m_lot, \" - Open Price : \", m_openPrice, \" - Current Price : \",m_currentPrice); Print(\"Balance : \",DoubleToString(m_balance,2),\" USD\"); Print(\"Equity : \",DoubleToString(m_equity,2),\" USD\"); //Print(\"Margin : \",DoubleToString(marginTRY,2),\" TRY - \",DoubleToString(marginUSD,2),\" USD\"); Print(\"Margin : \",DoubleToString(marginUSD,2),\" USD\"); Print(\"Free Margin : \",DoubleToString(freeMargin,2),\" USD\"); Print(\"Margin Level : \",DoubleToString(marginLevel,2),\"%\"); Print(\"Pips : \",DoubleToString(pips, 4)); Print(\"Profit : \",DoubleToString(spreadCost_TRY,2), \"TRY - \", DoubleToString(spreadCost_USD,2),\" USD\"); //Print(\"Floating P/L : \",DoubleToString(floatingPL_USD,2),\" USD\"); Print(\"Stop Out Lvl : \",DoubleToString(stopOutLevel,2),\"% / Equity Threshold = \",DoubleToString(stopOutEquity,2),\" USD\"); Print(\"Stop Loss : \",DoubleToString(m_stopLoss,2),\" USD\"); Print(\"Take Profit : \",DoubleToString(m_takeProfit,2),\" USD\"); Print(\"Commission : \",DoubleToString(m_commission,2),\" USD\"); Print(\"Swap : \",DoubleToString(m_swap,2),\" USD\"); // === Output on Chart === int y = 55; int step = 65; DrawBackground(\"bgReport\",10,40,1800,1000,clrBlack); DrawLabel(\"lbl1\",20,y,\"=== Position Report (USDTRY v1.0.2-beta) ===\",14,clrYellow); y+=step; DrawLabel(\"lbl2\",20,y,m_symbol + \" - \" + m_orderType + \" - \" + DoubleToString(m_lot,2) +\" - \"+ DoubleToString(m_openPrice, 5),14,clrWhite); y+=step; DrawLabel(\"lbl4\",20,y,\"Balance : \"+DoubleToString(m_balance,2)+\" USD\",14,clrWhite); y+=step; DrawLabel(\"lbl5\",20,y,\"Equity : \"+DoubleToString(m_equity,2)+\" USD\",14,clrGreen); y+=step; DrawLabel(\"lbl11\",20,y,\"Margin : \"+DoubleToString(marginUSD,2)+\" USD\",14,clrRed); y+=step; DrawLabel(\"lbl12\",20,y,\"Free Margin : \"+DoubleToString(freeMargin,2)+\" USD\",14,clrWhite); y+=step; DrawLabel(\"lbl13\",20,y,\"Margin Level : \"+DoubleToString(marginLevel,2)+\"%\",14,clrWhite); y+=step; DrawLabel(\"lbl6\",20,y,\"Floating P/L : \"+DoubleToString(floatingPL_USD,2)+\" USD\",14,clrWhite); y+=step; DrawLabel(\"lbl7\",20,y,\"Stop Loss : \"+DoubleToString(m_stopLoss,2),14,clrBlue); y+=step; DrawLabel(\"lbl8\",20,y,\"Take Profit : \"+DoubleToString(m_takeProfit,2),14,clrBlue); y+=step; DrawLabel(\"lbl9\",20,y,\"Commission : \"+DoubleToString(m_commission,2)+\" USD\",14,clrWhite); y+=step; DrawLabel(\"lbl10\",20,y,\"Swap : \"+DoubleToString(m_swap,2)+\" USD\",14,clrWhite); y+=step; } }; //--- Script start int OnStart() { double balance = AccountInfoDouble(ACCOUNT_BALANCE); double leverage = (double)AccountInfoInteger(ACCOUNT_LEVERAGE); CAccountPositionCalculator calc( balance, // balance 100000, // contract leverage, // leverage \"BUY\", // order type \"USDTRY\", // symbol 1.00, // lot 14.8259, // open price 14.8189, // current price 0.0, // stop loss 0.0, // take profit 0.0, // commission 0.0 // swap ); calc.Report(); return(0); } Conclusion In the case of USDTRY, you will obtain an MQL5 script that correctly reports account positions.\nYou will learn how margin and risk management calculations are performed using formulas.\nYou will be able to adapt the code output to your own scenarios, ensuring transparent and reliable reporting.\nAs a result, investors will be able to make more informed decisions and manage their risks more effectively.\n","wordCount":"1096","inLanguage":"en","image":"https://vuralpekyilmaz.github.io/images/terminal-black.png","datePublished":"2026-05-15T11:20:00+03:00","dateModified":"2026-05-15T11:20:00+03:00","mainEntityOfPage":{"@type":"WebPage","@id":"https://vuralpekyilmaz.github.io/en/posts/account-position-calculator-usdtry/"},"publisher":{"@type":"Organization","name":"","logo":{"@type":"ImageObject","url":"https://vuralpekyilmaz.github.io/favicon.ico"}}}</script></head><body id=top><header class=header><nav class=header-nav><div class=logo><div class=logo-switches><button id=theme-toggle class=theme-toggle accesskey=t title="(Alt + T)" aria-label="Toggle theme">
-<svg class="moon" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/></svg>
-<svg class="sun" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-</button><span class=nav-sep>|</span><ul class=lang-menu><li><a href=https://vuralpekyilmaz.github.io/ru/ title=Русский aria-label=Русский>Ru</a></li></ul></div></div><ul id=menu class=menu><li><a href=https://vuralpekyilmaz.github.io/en/ title=Home><span>Home</span></a></li><li><a href=https://vuralpekyilmaz.github.io/en/posts/ title=Post><span>Post</span></a></li><li><a href=https://vuralpekyilmaz.github.io/en/about/ title=About><span>About</span></a></li></ul></nav></header><main class=main><article class=post-single><header class=post-header><nav class=breadcrumbs role=navigation aria-label=Breadcrumb><a href=https://vuralpekyilmaz.github.io/en/>Home</a>
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg>
-<a href=https://vuralpekyilmaz.github.io/en/posts/>Article</a>
-<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right"><polyline points="9 18 15 12 9 6"/></svg></nav><h1 class="post-title entry-hint-parent">Account Position Calculator USDTRY</h1><div class=post-description>In financial markets, for investors engaged in leveraged trading, accurately reporting account positions is of critical importance.</div><div class=post-meta><span title='2026-05-15 11:20:00 +0300 +03'>May 15, 2026</span>&nbsp;·&nbsp;<span>6 min</span>&nbsp;|&nbsp;<span>Translations:</span><ul class=i18n_list><li><a href=https://vuralpekyilmaz.github.io/ru/posts/account-position-calculator-usdtry/>Ru</a></li></ul></div></header><figure class=entry-cover><img loading=eager src=https://vuralpekyilmaz.github.io/images/terminal-black.png alt="Account Position Calculator USDTRY"></figure><div class="post-content md-content"><h2 id=introduction>Introduction<a hidden class=anchor aria-hidden=true href=#introduction>#</a></h2><p>Especially in highly volatile pairs such as USDTRY, incorrectly calculated values of Equity, Margin, Free Margin, and Margin Level can mislead investors and weaken risk management.</p><p>This article addresses the development of an Account Position Calculator to help investors transparently and reliably track their positions.</p><p>Calculates position size, margin, and floating P/L using precise formulas.</p><p>Automatically reports Equity, Free Margin, and Margin Level values.</p><p>Displays outputs in both USD and TRY, enabling dual‑currency tracking.</p><p>Thanks to its modular code structure, it can be easily applied to both BUY and SELL scenarios.</p><p>Additionally, Stop Out Level logic is integrated, providing investors with clear information about risk thresholds.</p><p>Let&rsquo;s create a new class CAccountPositionCalculator.</p><div class=highlight><div style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><table style=border-spacing:0;padding:0;margin:0;border:0><tr><td style=vertical-align:top;padding:0;margin:0;border:0><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  1
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  2
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  3
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  4
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  5
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  6
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  7
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  8
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">  9
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 10
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 11
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 12
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 13
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 14
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 15
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 16
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 17
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 18
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 19
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 20
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 21
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 22
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 23
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 24
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 25
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 26
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 27
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 28
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 29
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 30
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 31
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 32
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 33
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 34
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 35
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 36
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 37
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 38
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 39
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 40
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 41
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 42
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 43
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 44
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 45
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 46
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 47
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 48
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 49
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 50
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 51
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 52
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 53
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 54
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 55
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 56
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 57
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 58
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 59
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 60
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 61
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 62
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 63
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 64
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 65
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 66
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 67
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 68
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 69
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 70
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 71
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 72
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 73
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 74
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 75
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 76
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 77
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 78
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 79
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 80
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 81
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 82
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 83
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 84
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 85
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 86
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 87
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 88
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 89
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 90
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 91
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 92
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 93
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 94
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 95
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 96
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 97
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 98
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f"> 99
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">100
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">101
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">102
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">103
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">104
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">105
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">106
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">107
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">108
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">109
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">110
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">111
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">112
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">113
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">114
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">115
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">116
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">117
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">118
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">119
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">120
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">121
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">122
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">123
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">124
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">125
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">126
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">127
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">128
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">129
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">130
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">131
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">132
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">133
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">134
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">135
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">136
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">137
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">138
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">139
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">140
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">141
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">142
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">143
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">144
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">145
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">146
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">147
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">148
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">149
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">150
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">151
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">152
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">153
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">154
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">155
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">156
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">157
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">158
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">159
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">160
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">161
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">162
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">163
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">164
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">165
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">166
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">167
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">168
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">169
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">170
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">171
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">172
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">173
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">174
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">175
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">176
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">177
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">178
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">179
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">180
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">181
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">182
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">183
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">184
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">185
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">186
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">187
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">188
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">189
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">190
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">191
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">192
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">193
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">194
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">195
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">196
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">197
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">198
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">199
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">200
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">201
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">202
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">203
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">204
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">205
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">206
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">207
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">208
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">209
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">210
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">211
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">212
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">213
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">214
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">215
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">216
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">217
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">218
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">219
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">220
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">221
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">222
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">223
-</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:.4em;padding:0 .4em;color:#7f7f7f">224
-</span></code></pre></td><td style=vertical-align:top;padding:0;margin:0;border:0;width:100%><pre tabindex=0 style=color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none><code class=language-cpp data-lang=cpp><span style=display:flex><span><span style=color:#6272a4>//+------------------------------------------------------------------+
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>//|                                  Copyright 2026, MetaQuotes Ltd. |
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>//|                                             https://www.mql5.com |
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>//| PositionSizeCalculatorUSDTRY.mq5                                 |
-</span></span></span><span style=display:flex><span><span style=color:#6272a4>//+------------------------------------------------------------------+
-</span></span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#6272a4>//--- Helper function: draw text on chart
-</span></span></span><span style=display:flex><span><span style=color:#8be9fd>void</span> <span style=color:#50fa7b>DrawLabel</span>(string name,<span style=color:#8be9fd>int</span> x,<span style=color:#8be9fd>int</span> y,string text,<span style=color:#8be9fd>int</span> fontSize,color clr)
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>   <span style=color:#ff79c6>if</span>(ObjectFind(<span style=color:#bd93f9>0</span>,name) <span style=color:#ff79c6>==</span> <span style=color:#ff79c6>-</span><span style=color:#bd93f9>1</span>)
-</span></span><span style=display:flex><span>      ObjectCreate(<span style=color:#bd93f9>0</span>,name,OBJ_LABEL,<span style=color:#bd93f9>0</span>,<span style=color:#bd93f9>0</span>,<span style=color:#bd93f9>0</span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>   ObjectSetInteger(<span style=color:#bd93f9>0</span>,name,OBJPROP_CORNER,CORNER_LEFT_UPPER);
-</span></span><span style=display:flex><span>   ObjectSetInteger(<span style=color:#bd93f9>0</span>,name,OBJPROP_XDISTANCE,x);
-</span></span><span style=display:flex><span>   ObjectSetInteger(<span style=color:#bd93f9>0</span>,name,OBJPROP_YDISTANCE,y);
-</span></span><span style=display:flex><span>   ObjectSetInteger(<span style=color:#bd93f9>0</span>,name,OBJPROP_FONTSIZE,fontSize);
-</span></span><span style=display:flex><span>   ObjectSetInteger(<span style=color:#bd93f9>0</span>,name,OBJPROP_COLOR,clr);
-</span></span><span style=display:flex><span>   ObjectSetString(<span style=color:#bd93f9>0</span>,name,OBJPROP_TEXT,text);
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#6272a4>//--- Helper function: background for report block
-</span></span></span><span style=display:flex><span><span style=color:#8be9fd>void</span> <span style=color:#50fa7b>DrawBackground</span>(string name,<span style=color:#8be9fd>int</span> x,<span style=color:#8be9fd>int</span> y,<span style=color:#8be9fd>int</span> width,<span style=color:#8be9fd>int</span> height,color clr)
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>   <span style=color:#ff79c6>if</span>(ObjectFind(<span style=color:#bd93f9>0</span>,name) <span style=color:#ff79c6>==</span> <span style=color:#ff79c6>-</span><span style=color:#bd93f9>1</span>)
-</span></span><span style=display:flex><span>      ObjectCreate(<span style=color:#bd93f9>0</span>,name,OBJ_RECTANGLE_LABEL,<span style=color:#bd93f9>0</span>,<span style=color:#bd93f9>0</span>,<span style=color:#bd93f9>0</span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>   ObjectSetInteger(<span style=color:#bd93f9>0</span>,name,OBJPROP_CORNER,CORNER_LEFT_UPPER);
-</span></span><span style=display:flex><span>   ObjectSetInteger(<span style=color:#bd93f9>0</span>,name,OBJPROP_XDISTANCE,x);
-</span></span><span style=display:flex><span>   ObjectSetInteger(<span style=color:#bd93f9>0</span>,name,OBJPROP_YDISTANCE,y);
-</span></span><span style=display:flex><span>   ObjectSetInteger(<span style=color:#bd93f9>0</span>,name,OBJPROP_XSIZE,width);
-</span></span><span style=display:flex><span>   ObjectSetInteger(<span style=color:#bd93f9>0</span>,name,OBJPROP_YSIZE,height);
-</span></span><span style=display:flex><span>   ObjectSetInteger(<span style=color:#bd93f9>0</span>,name,OBJPROP_BGCOLOR,clr);
-</span></span><span style=display:flex><span>   ObjectSetInteger(<span style=color:#bd93f9>0</span>,name,OBJPROP_COLOR,clr);
-</span></span><span style=display:flex><span>   ObjectSetInteger(<span style=color:#bd93f9>0</span>,name,OBJPROP_STYLE,STYLE_SOLID);
-</span></span><span style=display:flex><span>   ObjectSetInteger(<span style=color:#bd93f9>0</span>,name,OBJPROP_WIDTH,<span style=color:#bd93f9>0</span>);
-</span></span><span style=display:flex><span>   ObjectSetString(<span style=color:#bd93f9>0</span>,name,OBJPROP_TEXT,<span style=color:#f1fa8c>&#34;&#34;</span>);
-</span></span><span style=display:flex><span>  }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#6272a4>//--- Position Calculator
-</span></span></span><span style=display:flex><span><span style=color:#ff79c6>class</span> <span style=color:#50fa7b>CAccountPositionCalculator</span>
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span><span style=color:#ff79c6>private</span><span style=color:#ff79c6>:</span>
-</span></span><span style=display:flex><span>   <span style=color:#6272a4>// Account information
-</span></span></span><span style=display:flex><span>   <span style=color:#8be9fd>double</span> m_balance;   
-</span></span><span style=display:flex><span>   <span style=color:#8be9fd>double</span> m_equity;
-</span></span><span style=display:flex><span>   <span style=color:#8be9fd>double</span> m_contractSize;
-</span></span><span style=display:flex><span>   <span style=color:#8be9fd>double</span> m_leverage;
-</span></span><span style=display:flex><span>   
-</span></span><span style=display:flex><span>   <span style=color:#6272a4>// Order information
-</span></span></span><span style=display:flex><span>   string m_orderType;
-</span></span><span style=display:flex><span>   string m_symbol;
-</span></span><span style=display:flex><span>   <span style=color:#8be9fd>double</span> m_lot;
-</span></span><span style=display:flex><span>   <span style=color:#8be9fd>double</span> m_openPrice;
-</span></span><span style=display:flex><span>   <span style=color:#8be9fd>double</span> m_currentPrice;
-</span></span><span style=display:flex><span>   <span style=color:#8be9fd>double</span> m_stopLoss;
-</span></span><span style=display:flex><span>   <span style=color:#8be9fd>double</span> m_takeProfit;
-</span></span><span style=display:flex><span>   <span style=color:#8be9fd>double</span> m_commission;
-</span></span><span style=display:flex><span>   <span style=color:#8be9fd>double</span> m_swap;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#ff79c6>public</span><span style=color:#ff79c6>:</span>   
-</span></span><span style=display:flex><span>   CAccountPositionCalculator(
-</span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> bal, 
-</span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> cSize, 
-</span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> lev,
-</span></span><span style=display:flex><span>      string oType,
-</span></span><span style=display:flex><span>      string sym,
-</span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> l,
-</span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> oPrice,
-</span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> cPrice,
-</span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> sL,
-</span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> tP,
-</span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> comm,
-</span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> sw
-</span></span><span style=display:flex><span>   )
-</span></span><span style=display:flex><span>     {
-</span></span><span style=display:flex><span>      m_balance      <span style=color:#ff79c6>=</span> bal;  
-</span></span><span style=display:flex><span>      m_equity       <span style=color:#ff79c6>=</span> bal;      
-</span></span><span style=display:flex><span>      m_contractSize <span style=color:#ff79c6>=</span> cSize;
-</span></span><span style=display:flex><span>      m_leverage     <span style=color:#ff79c6>=</span> lev;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>      m_orderType    <span style=color:#ff79c6>=</span> oType;
-</span></span><span style=display:flex><span>      m_symbol       <span style=color:#ff79c6>=</span> sym;
-</span></span><span style=display:flex><span>      m_lot          <span style=color:#ff79c6>=</span> l;
-</span></span><span style=display:flex><span>      m_openPrice    <span style=color:#ff79c6>=</span> oPrice;
-</span></span><span style=display:flex><span>      m_currentPrice <span style=color:#ff79c6>=</span> cPrice;
-</span></span><span style=display:flex><span>      m_stopLoss     <span style=color:#ff79c6>=</span> sL;
-</span></span><span style=display:flex><span>      m_takeProfit   <span style=color:#ff79c6>=</span> tP;
-</span></span><span style=display:flex><span>      m_commission   <span style=color:#ff79c6>=</span> comm;
-</span></span><span style=display:flex><span>      m_swap         <span style=color:#ff79c6>=</span> sw;
-</span></span><span style=display:flex><span>     }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>   <span style=color:#8be9fd>void</span> <span style=color:#50fa7b>Report</span>()
-</span></span><span style=display:flex><span>     {
-</span></span><span style=display:flex><span>      
-</span></span><span style=display:flex><span>      <span style=color:#6272a4>// 1 pip = 0.0001 (for 4-digit pairs like USDTRY)
-</span></span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> pipSize <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0.0001</span>;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>      <span style=color:#6272a4>// Broker Stop Out Level (%10)
-</span></span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> stopOutLevel <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>10</span>;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>      <span style=color:#6272a4>// Floating P/L in TRY
-</span></span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> floatingPL_TRY <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0.0</span>;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>      <span style=color:#ff79c6>if</span> (m_orderType <span style=color:#ff79c6>==</span> <span style=color:#f1fa8c>&#34;BUY&#34;</span>)
-</span></span><span style=display:flex><span>      {          
-</span></span><span style=display:flex><span>          floatingPL_TRY <span style=color:#ff79c6>=</span> (m_currentPrice <span style=color:#ff79c6>-</span> m_openPrice) <span style=color:#ff79c6>*</span> m_contractSize <span style=color:#ff79c6>*</span> m_lot;
-</span></span><span style=display:flex><span>      }
-</span></span><span style=display:flex><span>      <span style=color:#ff79c6>else</span> <span style=color:#ff79c6>if</span> (m_orderType <span style=color:#ff79c6>==</span> <span style=color:#f1fa8c>&#34;SELL&#34;</span>)
-</span></span><span style=display:flex><span>      {       
-</span></span><span style=display:flex><span>          floatingPL_TRY <span style=color:#ff79c6>=</span> (m_openPrice <span style=color:#ff79c6>-</span> m_currentPrice) <span style=color:#ff79c6>*</span> m_contractSize <span style=color:#ff79c6>*</span> m_lot;
-</span></span><span style=display:flex><span>      }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>      <span style=color:#6272a4>// Floating P/L in USD
-</span></span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> floatingPL_USD <span style=color:#ff79c6>=</span> floatingPL_TRY <span style=color:#ff79c6>/</span> m_currentPrice;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>      <span style=color:#6272a4>// Equity = Balance + Floating P/L - Commission + Swap
-</span></span></span><span style=display:flex><span>      m_equity <span style=color:#ff79c6>=</span> m_balance <span style=color:#ff79c6>+</span> floatingPL_USD <span style=color:#ff79c6>-</span> m_commission <span style=color:#ff79c6>+</span> m_swap;      
-</span></span><span style=display:flex><span>      
-</span></span><span style=display:flex><span>      <span style=color:#6272a4>// Margin in USD
-</span></span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> marginUSD <span style=color:#ff79c6>=</span> (m_contractSize <span style=color:#ff79c6>*</span> m_lot) <span style=color:#ff79c6>/</span> m_leverage;
-</span></span><span style=display:flex><span>      
-</span></span><span style=display:flex><span>      <span style=color:#6272a4>// Free Margin
-</span></span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> freeMargin <span style=color:#ff79c6>=</span> m_equity <span style=color:#ff79c6>-</span> marginUSD;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>      <span style=color:#6272a4>// Margin Level
-</span></span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> marginLevel <span style=color:#ff79c6>=</span> marginUSD <span style=color:#ff79c6>&gt;</span> <span style=color:#bd93f9>0</span> <span style=color:#ff79c6>?</span> (m_equity <span style=color:#ff79c6>/</span> marginUSD) <span style=color:#ff79c6>*</span> <span style=color:#bd93f9>100</span> <span style=color:#ff79c6>:</span> <span style=color:#bd93f9>0</span>;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>      <span style=color:#6272a4>// Spread Cost
-</span></span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> spreadCost <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0</span>;
-</span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> spreadCost_TRY <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>0</span>;      
-</span></span><span style=display:flex><span>      
-</span></span><span style=display:flex><span>      <span style=color:#ff79c6>if</span> (m_orderType <span style=color:#ff79c6>==</span> <span style=color:#f1fa8c>&#34;BUY&#34;</span>)
-</span></span><span style=display:flex><span>      {          
-</span></span><span style=display:flex><span>          spreadCost <span style=color:#ff79c6>=</span> (m_currentPrice <span style=color:#ff79c6>-</span> m_openPrice);
-</span></span><span style=display:flex><span>      }
-</span></span><span style=display:flex><span>      <span style=color:#ff79c6>else</span> <span style=color:#ff79c6>if</span> (m_orderType <span style=color:#ff79c6>==</span> <span style=color:#f1fa8c>&#34;SELL&#34;</span>)
-</span></span><span style=display:flex><span>      {
-</span></span><span style=display:flex><span>          spreadCost <span style=color:#ff79c6>=</span> (m_openPrice <span style=color:#ff79c6>-</span> m_currentPrice);
-</span></span><span style=display:flex><span>      }      
-</span></span><span style=display:flex><span>            
-</span></span><span style=display:flex><span>      <span style=color:#6272a4>//Pip Size
-</span></span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> pips <span style=color:#ff79c6>=</span> spreadCost <span style=color:#ff79c6>/</span> pipSize;
-</span></span><span style=display:flex><span>      
-</span></span><span style=display:flex><span>      <span style=color:#6272a4>// Spread Cost in TRY
-</span></span></span><span style=display:flex><span>      spreadCost_TRY <span style=color:#ff79c6>=</span> spreadCost <span style=color:#ff79c6>*</span> m_contractSize <span style=color:#ff79c6>*</span> m_lot;
-</span></span><span style=display:flex><span>      
-</span></span><span style=display:flex><span>      <span style=color:#6272a4>//Print(&#34;spreadCost : &#34;, spreadCost , &#34; - m_contractSize : &#34;, m_contractSize, &#34; - m_lot : &#34;, m_lot);
-</span></span></span><span style=display:flex><span>      <span style=color:#6272a4>//Print(&#34;spreadCost_TRY : &#34;, spreadCost_TRY);
-</span></span></span><span style=display:flex><span>      
-</span></span><span style=display:flex><span>      <span style=color:#6272a4>// Profit in USD
-</span></span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> spreadCost_USD <span style=color:#ff79c6>=</span> spreadCost_TRY <span style=color:#ff79c6>/</span> m_currentPrice;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>      <span style=color:#6272a4>// Stop Out Equity Threshold
-</span></span></span><span style=display:flex><span>      <span style=color:#8be9fd>double</span> stopOutEquity <span style=color:#ff79c6>=</span> (marginUSD <span style=color:#ff79c6>*</span> stopOutLevel) <span style=color:#ff79c6>/</span> <span style=color:#bd93f9>100</span>;
-</span></span><span style=display:flex><span>      
-</span></span><span style=display:flex><span>      <span style=color:#ff79c6>if</span> (m_equity <span style=color:#ff79c6>&lt;=</span> stopOutEquity)
-</span></span><span style=display:flex><span>      {         
-</span></span><span style=display:flex><span>         Print(<span style=color:#f1fa8c>&#34;️STOP OUT RISK&#34;</span>);
-</span></span><span style=display:flex><span>      }
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>      <span style=color:#6272a4>// === Output in Experts ===
-</span></span></span><span style=display:flex><span>      Print(<span style=color:#f1fa8c>&#34;=== Position Report (USDTRY v1.0.2-beta) ===&#34;</span>);
-</span></span><span style=display:flex><span>      Print(<span style=color:#f1fa8c>&#34;Symbol : &#34;</span>, m_symbol, <span style=color:#f1fa8c>&#34; - Type : &#34;</span>, m_orderType ,<span style=color:#f1fa8c>&#34; - Size : &#34;</span>, m_lot, <span style=color:#f1fa8c>&#34; - Open Price : &#34;</span>, m_openPrice, <span style=color:#f1fa8c>&#34; - Current Price : &#34;</span>,m_currentPrice);
-</span></span><span style=display:flex><span>      Print(<span style=color:#f1fa8c>&#34;Balance       : &#34;</span>,DoubleToString(m_balance,<span style=color:#bd93f9>2</span>),<span style=color:#f1fa8c>&#34; USD&#34;</span>);
-</span></span><span style=display:flex><span>      Print(<span style=color:#f1fa8c>&#34;Equity        : &#34;</span>,DoubleToString(m_equity,<span style=color:#bd93f9>2</span>),<span style=color:#f1fa8c>&#34; USD&#34;</span>);
-</span></span><span style=display:flex><span>      <span style=color:#6272a4>//Print(&#34;Margin      : &#34;,DoubleToString(marginTRY,2),&#34; TRY - &#34;,DoubleToString(marginUSD,2),&#34; USD&#34;);
-</span></span></span><span style=display:flex><span>      Print(<span style=color:#f1fa8c>&#34;Margin        : &#34;</span>,DoubleToString(marginUSD,<span style=color:#bd93f9>2</span>),<span style=color:#f1fa8c>&#34; USD&#34;</span>);
-</span></span><span style=display:flex><span>      Print(<span style=color:#f1fa8c>&#34;Free Margin   : &#34;</span>,DoubleToString(freeMargin,<span style=color:#bd93f9>2</span>),<span style=color:#f1fa8c>&#34; USD&#34;</span>);
-</span></span><span style=display:flex><span>      Print(<span style=color:#f1fa8c>&#34;Margin Level  : &#34;</span>,DoubleToString(marginLevel,<span style=color:#bd93f9>2</span>),<span style=color:#f1fa8c>&#34;%&#34;</span>);
-</span></span><span style=display:flex><span>      Print(<span style=color:#f1fa8c>&#34;Pips          : &#34;</span>,DoubleToString(pips, <span style=color:#bd93f9>4</span>));
-</span></span><span style=display:flex><span>      Print(<span style=color:#f1fa8c>&#34;Profit        : &#34;</span>,DoubleToString(spreadCost_TRY,<span style=color:#bd93f9>2</span>), <span style=color:#f1fa8c>&#34;TRY - &#34;</span>, DoubleToString(spreadCost_USD,<span style=color:#bd93f9>2</span>),<span style=color:#f1fa8c>&#34; USD&#34;</span>);
-</span></span><span style=display:flex><span>      <span style=color:#6272a4>//Print(&#34;Floating P/L  : &#34;,DoubleToString(floatingPL_USD,2),&#34; USD&#34;);
-</span></span></span><span style=display:flex><span>      Print(<span style=color:#f1fa8c>&#34;Stop Out Lvl  : &#34;</span>,DoubleToString(stopOutLevel,<span style=color:#bd93f9>2</span>),<span style=color:#f1fa8c>&#34;% / Equity Threshold = &#34;</span>,DoubleToString(stopOutEquity,<span style=color:#bd93f9>2</span>),<span style=color:#f1fa8c>&#34; USD&#34;</span>);      
-</span></span><span style=display:flex><span>      Print(<span style=color:#f1fa8c>&#34;Stop Loss     : &#34;</span>,DoubleToString(m_stopLoss,<span style=color:#bd93f9>2</span>),<span style=color:#f1fa8c>&#34; USD&#34;</span>);
-</span></span><span style=display:flex><span>      Print(<span style=color:#f1fa8c>&#34;Take Profit   : &#34;</span>,DoubleToString(m_takeProfit,<span style=color:#bd93f9>2</span>),<span style=color:#f1fa8c>&#34; USD&#34;</span>);
-</span></span><span style=display:flex><span>      Print(<span style=color:#f1fa8c>&#34;Commission    : &#34;</span>,DoubleToString(m_commission,<span style=color:#bd93f9>2</span>),<span style=color:#f1fa8c>&#34; USD&#34;</span>);
-</span></span><span style=display:flex><span>      Print(<span style=color:#f1fa8c>&#34;Swap          : &#34;</span>,DoubleToString(m_swap,<span style=color:#bd93f9>2</span>),<span style=color:#f1fa8c>&#34; USD&#34;</span>);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>      <span style=color:#6272a4>// === Output on Chart ===
-</span></span></span><span style=display:flex><span>      <span style=color:#8be9fd>int</span> y <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>55</span>;
-</span></span><span style=display:flex><span>      <span style=color:#8be9fd>int</span> step <span style=color:#ff79c6>=</span> <span style=color:#bd93f9>65</span>;
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>      DrawBackground(<span style=color:#f1fa8c>&#34;bgReport&#34;</span>,<span style=color:#bd93f9>10</span>,<span style=color:#bd93f9>40</span>,<span style=color:#bd93f9>1800</span>,<span style=color:#bd93f9>1000</span>,clrBlack);
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>      DrawLabel(<span style=color:#f1fa8c>&#34;lbl1&#34;</span>,<span style=color:#bd93f9>20</span>,y,<span style=color:#f1fa8c>&#34;=== Position Report (USDTRY v1.0.2-beta) ===&#34;</span>,<span style=color:#bd93f9>14</span>,clrYellow); y<span style=color:#ff79c6>+=</span>step;
-</span></span><span style=display:flex><span>      DrawLabel(<span style=color:#f1fa8c>&#34;lbl2&#34;</span>,<span style=color:#bd93f9>20</span>,y,m_symbol <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34; - &#34;</span> <span style=color:#ff79c6>+</span> m_orderType <span style=color:#ff79c6>+</span> <span style=color:#f1fa8c>&#34; - &#34;</span> <span style=color:#ff79c6>+</span> DoubleToString(m_lot,<span style=color:#bd93f9>2</span>) <span style=color:#ff79c6>+</span><span style=color:#f1fa8c>&#34; - &#34;</span><span style=color:#ff79c6>+</span> DoubleToString(m_openPrice, <span style=color:#bd93f9>5</span>),<span style=color:#bd93f9>14</span>,clrWhite); y<span style=color:#ff79c6>+=</span>step;      
-</span></span><span style=display:flex><span>      DrawLabel(<span style=color:#f1fa8c>&#34;lbl4&#34;</span>,<span style=color:#bd93f9>20</span>,y,<span style=color:#f1fa8c>&#34;Balance            : &#34;</span><span style=color:#ff79c6>+</span>DoubleToString(m_balance,<span style=color:#bd93f9>2</span>)<span style=color:#ff79c6>+</span><span style=color:#f1fa8c>&#34; USD&#34;</span>,<span style=color:#bd93f9>14</span>,clrWhite); y<span style=color:#ff79c6>+=</span>step;
-</span></span><span style=display:flex><span>      DrawLabel(<span style=color:#f1fa8c>&#34;lbl5&#34;</span>,<span style=color:#bd93f9>20</span>,y,<span style=color:#f1fa8c>&#34;Equity             : &#34;</span><span style=color:#ff79c6>+</span>DoubleToString(m_equity,<span style=color:#bd93f9>2</span>)<span style=color:#ff79c6>+</span><span style=color:#f1fa8c>&#34; USD&#34;</span>,<span style=color:#bd93f9>14</span>,clrGreen); y<span style=color:#ff79c6>+=</span>step;   
-</span></span><span style=display:flex><span>      DrawLabel(<span style=color:#f1fa8c>&#34;lbl11&#34;</span>,<span style=color:#bd93f9>20</span>,y,<span style=color:#f1fa8c>&#34;Margin            : &#34;</span><span style=color:#ff79c6>+</span>DoubleToString(marginUSD,<span style=color:#bd93f9>2</span>)<span style=color:#ff79c6>+</span><span style=color:#f1fa8c>&#34; USD&#34;</span>,<span style=color:#bd93f9>14</span>,clrRed); y<span style=color:#ff79c6>+=</span>step;       
-</span></span><span style=display:flex><span>      DrawLabel(<span style=color:#f1fa8c>&#34;lbl12&#34;</span>,<span style=color:#bd93f9>20</span>,y,<span style=color:#f1fa8c>&#34;Free Margin       : &#34;</span><span style=color:#ff79c6>+</span>DoubleToString(freeMargin,<span style=color:#bd93f9>2</span>)<span style=color:#ff79c6>+</span><span style=color:#f1fa8c>&#34; USD&#34;</span>,<span style=color:#bd93f9>14</span>,clrWhite); y<span style=color:#ff79c6>+=</span>step;
-</span></span><span style=display:flex><span>      DrawLabel(<span style=color:#f1fa8c>&#34;lbl13&#34;</span>,<span style=color:#bd93f9>20</span>,y,<span style=color:#f1fa8c>&#34;Margin Level      : &#34;</span><span style=color:#ff79c6>+</span>DoubleToString(marginLevel,<span style=color:#bd93f9>2</span>)<span style=color:#ff79c6>+</span><span style=color:#f1fa8c>&#34;%&#34;</span>,<span style=color:#bd93f9>14</span>,clrWhite); y<span style=color:#ff79c6>+=</span>step;
-</span></span><span style=display:flex><span>      DrawLabel(<span style=color:#f1fa8c>&#34;lbl6&#34;</span>,<span style=color:#bd93f9>20</span>,y,<span style=color:#f1fa8c>&#34;Floating P/L       : &#34;</span><span style=color:#ff79c6>+</span>DoubleToString(floatingPL_USD,<span style=color:#bd93f9>2</span>)<span style=color:#ff79c6>+</span><span style=color:#f1fa8c>&#34; USD&#34;</span>,<span style=color:#bd93f9>14</span>,clrWhite); y<span style=color:#ff79c6>+=</span>step;
-</span></span><span style=display:flex><span>      DrawLabel(<span style=color:#f1fa8c>&#34;lbl7&#34;</span>,<span style=color:#bd93f9>20</span>,y,<span style=color:#f1fa8c>&#34;Stop Loss          : &#34;</span><span style=color:#ff79c6>+</span>DoubleToString(m_stopLoss,<span style=color:#bd93f9>2</span>),<span style=color:#bd93f9>14</span>,clrBlue); y<span style=color:#ff79c6>+=</span>step; 
-</span></span><span style=display:flex><span>      DrawLabel(<span style=color:#f1fa8c>&#34;lbl8&#34;</span>,<span style=color:#bd93f9>20</span>,y,<span style=color:#f1fa8c>&#34;Take Profit        : &#34;</span><span style=color:#ff79c6>+</span>DoubleToString(m_takeProfit,<span style=color:#bd93f9>2</span>),<span style=color:#bd93f9>14</span>,clrBlue); y<span style=color:#ff79c6>+=</span>step;
-</span></span><span style=display:flex><span>      DrawLabel(<span style=color:#f1fa8c>&#34;lbl9&#34;</span>,<span style=color:#bd93f9>20</span>,y,<span style=color:#f1fa8c>&#34;Commission         : &#34;</span><span style=color:#ff79c6>+</span>DoubleToString(m_commission,<span style=color:#bd93f9>2</span>)<span style=color:#ff79c6>+</span><span style=color:#f1fa8c>&#34; USD&#34;</span>,<span style=color:#bd93f9>14</span>,clrWhite); y<span style=color:#ff79c6>+=</span>step;
-</span></span><span style=display:flex><span>      DrawLabel(<span style=color:#f1fa8c>&#34;lbl10&#34;</span>,<span style=color:#bd93f9>20</span>,y,<span style=color:#f1fa8c>&#34;Swap              : &#34;</span><span style=color:#ff79c6>+</span>DoubleToString(m_swap,<span style=color:#bd93f9>2</span>)<span style=color:#ff79c6>+</span><span style=color:#f1fa8c>&#34; USD&#34;</span>,<span style=color:#bd93f9>14</span>,clrWhite); y<span style=color:#ff79c6>+=</span>step;      
-</span></span><span style=display:flex><span>     }
-</span></span><span style=display:flex><span>  };
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span><span style=color:#6272a4>//--- Script start
-</span></span></span><span style=display:flex><span><span style=color:#8be9fd>int</span> <span style=color:#50fa7b>OnStart</span>()
-</span></span><span style=display:flex><span>  {
-</span></span><span style=display:flex><span>   <span style=color:#8be9fd>double</span> balance    <span style=color:#ff79c6>=</span> AccountInfoDouble(ACCOUNT_BALANCE);
-</span></span><span style=display:flex><span>   <span style=color:#8be9fd>double</span> leverage   <span style=color:#ff79c6>=</span> (<span style=color:#8be9fd>double</span>)AccountInfoInteger(ACCOUNT_LEVERAGE);   
-</span></span><span style=display:flex><span>   
-</span></span><span style=display:flex><span>   CAccountPositionCalculator calc(
-</span></span><span style=display:flex><span>      balance,    <span style=color:#6272a4>// balance
-</span></span></span><span style=display:flex><span>      <span style=color:#bd93f9>100000</span>,     <span style=color:#6272a4>// contract
-</span></span></span><span style=display:flex><span>      leverage,   <span style=color:#6272a4>// leverage
-</span></span></span><span style=display:flex><span>      <span style=color:#f1fa8c>&#34;BUY&#34;</span>,      <span style=color:#6272a4>// order type
-</span></span></span><span style=display:flex><span>      <span style=color:#f1fa8c>&#34;USDTRY&#34;</span>,   <span style=color:#6272a4>// symbol
-</span></span></span><span style=display:flex><span>      <span style=color:#bd93f9>1.00</span>,       <span style=color:#6272a4>// lot
-</span></span></span><span style=display:flex><span>      <span style=color:#bd93f9>14.8259</span>,    <span style=color:#6272a4>// open price
-</span></span></span><span style=display:flex><span>      <span style=color:#bd93f9>14.8189</span>,    <span style=color:#6272a4>// current price
-</span></span></span><span style=display:flex><span>      <span style=color:#bd93f9>0.0</span>,        <span style=color:#6272a4>// stop loss
-</span></span></span><span style=display:flex><span>      <span style=color:#bd93f9>0.0</span>,        <span style=color:#6272a4>// take profit
-</span></span></span><span style=display:flex><span>      <span style=color:#bd93f9>0.0</span>,        <span style=color:#6272a4>// commission
-</span></span></span><span style=display:flex><span>      <span style=color:#bd93f9>0.0</span>         <span style=color:#6272a4>// swap
-</span></span></span><span style=display:flex><span>   );
-</span></span><span style=display:flex><span>
-</span></span><span style=display:flex><span>   calc.Report();
-</span></span><span style=display:flex><span>   <span style=color:#ff79c6>return</span>(<span style=color:#bd93f9>0</span>);
-</span></span><span style=display:flex><span>  }
-</span></span></code></pre></td></tr></table></div></div><h2 id=conclusion>Conclusion<a hidden class=anchor aria-hidden=true href=#conclusion>#</a></h2><p>In the case of USDTRY, you will obtain an MQL5 script that correctly reports account positions.</p><p>You will learn how margin and risk management calculations are performed using formulas.</p><p>You will be able to adapt the code output to your own scenarios, ensuring transparent and reliable reporting.</p><p>As a result, investors will be able to make more informed decisions and manage their risks more effectively.</p></div><div class=partialExtendAuthorBox><h3>EXTEND POST CONTENT</h3><p>EXTEND POST CONTENT</p></div><section class=related-posts><h2>Related Posts</h2><ul><li><a href=https://vuralpekyilmaz.github.io/en/posts/second-post/>Second Article</a></li><li><a href=https://vuralpekyilmaz.github.io/en/posts/first-post/>First Article</a></li></ul></section><footer class=post-footer><ul class=post-tags><li><a href=https://vuralpekyilmaz.github.io/en/tags/metatrader5/>Metatrader5</a></li><li><a href=https://vuralpekyilmaz.github.io/en/tags/mql5/>MQL5</a></li><li><a href=https://vuralpekyilmaz.github.io/en/tags/trading/>Trading</a></li><li><a href=https://vuralpekyilmaz.github.io/en/tags/usdtry/>USDTRY</a></li></ul></footer></article></main><footer class=footer><span>&copy; 2026 <a href=https://vuralpekyilmaz.github.io/en/></a></span>·
-<span>Powered by
-<a href="https://gohugo.io/?utm_source=papermod" rel=noopener target=_blank>Hugo</a> &
-<a href=https://github.com/adityatelange/hugo-PaperMod/ rel=noopener target=_blank>PaperMod</a></span></footer><a href=#top id=top-link class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey=g><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up"><polyline points="17 11 12 6 7 11"/><polyline points="17 18 12 13 7 18"/></svg>
-</a><script>let menu=document.getElementById("menu");if(menu){const e=localStorage.getItem("menu-scroll-position");e&&(menu.scrollLeft=parseInt(e,10)),menu.onscroll=function(){localStorage.setItem("menu-scroll-position",menu.scrollLeft)}}document.querySelectorAll('a[href^="#"]').forEach(e=>{e.addEventListener("click",function(e){e.preventDefault();var t=this.getAttribute("href").substr(1);window.matchMedia("(prefers-reduced-motion: reduce)").matches?document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView():document.querySelector(`[id='${decodeURIComponent(t)}']`).scrollIntoView({behavior:"smooth"}),t==="top"?history.replaceState(null,null," "):history.pushState(null,null,`#${t}`)})})</script><script>var toplink=document.getElementById("top-link");window.onscroll=function(){const e=window.innerHeight;document.body.scrollTop>e||document.documentElement.scrollTop>e?toplink.classList.remove("hidden"):toplink.classList.add("hidden")}</script><script>document.getElementById("theme-toggle").addEventListener("click",()=>{const e=document.querySelector("html");e.dataset.theme==="dark"?(e.dataset.theme="light",localStorage.setItem("pref-theme","light")):(e.dataset.theme="dark",localStorage.setItem("pref-theme","dark"))})</script><script>document.querySelectorAll("pre > code").forEach(e=>{const n=e.parentNode.parentNode,t=document.createElement("button");t.classList.add("copy-code"),t.innerHTML="copy";function s(){t.innerHTML="copied!",setTimeout(()=>{t.innerHTML="copy"},2e3)}t.addEventListener("click",t=>{if("clipboard"in navigator){navigator.clipboard.writeText(e.textContent),s();return}const n=document.createRange();n.selectNodeContents(e);const o=window.getSelection();o.removeAllRanges(),o.addRange(n);try{document.execCommand("copy"),s()}catch{}o.removeRange(n)}),n.classList.contains("highlight")?n.appendChild(t):n.parentNode.firstChild==n||(e.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName=="TABLE"?e.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(t):e.parentNode.appendChild(t))})</script></body></html>
+<!DOCTYPE html>
+<html lang="en" dir="auto" data-theme="auto">
+
+<head><meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="robots" content="index, follow">
+<title>Account Position Calculator USDTRY | </title>
+<meta name="keywords" content="Metatrader5, MQL5, Trading, USDTRY">
+<meta name="description" content="In financial markets, for investors engaged in leveraged trading, accurately reporting account positions is of critical importance.">
+<meta name="author" content="">
+<link rel="canonical" href="https://vuralpekyilmaz.github.io/en/posts/account-position-calculator-usdtry/">
+<link href="https://vuralpekyilmaz.github.io/assets/css/stylesheet.78ef97cd0c7725caee02458b06703dcc0942435ebe740c667134d5000dac8065.css" rel="preload stylesheet" as="style">
+<link rel="icon" href="https://vuralpekyilmaz.github.io/favicon.ico">
+<link rel="icon" type="image/png" sizes="16x16" href="https://vuralpekyilmaz.github.io/favicon-16x16.png">
+<link rel="icon" type="image/png" sizes="32x32" href="https://vuralpekyilmaz.github.io/favicon-32x32.png">
+<link rel="apple-touch-icon" href="https://vuralpekyilmaz.github.io/apple-touch-icon.png">
+<link rel="mask-icon" href="https://vuralpekyilmaz.github.io/safari-pinned-tab.svg">
+<meta name="theme-color" content="#2e2e33">
+<meta name="msapplication-TileColor" content="#2e2e33">
+<link rel="alternate" hreflang="en" href="https://vuralpekyilmaz.github.io/en/posts/account-position-calculator-usdtry/">
+<link rel="alternate" hreflang="ru" href="https://vuralpekyilmaz.github.io/ru/posts/account-position-calculator-usdtry/">
+<noscript>
+    <style>
+        #theme-toggle,
+        .top-link {
+            display: none;
+        }
+
+    </style>
+    <style>
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --theme: rgb(29, 30, 32);
+                --entry: rgb(46, 46, 51);
+                --primary: rgb(218, 218, 219);
+                --secondary: rgb(155, 156, 157);
+                --tertiary: rgb(65, 66, 68);
+                --content: rgb(196, 196, 197);
+                --code-block-bg: rgb(46, 46, 51);
+                --code-bg: rgb(55, 56, 62);
+                --border: rgb(51, 51, 51);
+                color-scheme: dark;
+            }
+
+            .list {
+                background: var(--theme);
+            }
+
+            .toc {
+                background: var(--entry);
+            }
+        }
+
+    </style>
+</noscript>
+<script>
+    if (localStorage.getItem("pref-theme") === "dark") {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else if (localStorage.getItem("pref-theme") === "light") {
+       document.querySelector("html").dataset.theme = 'light';
+    } else if (window.matchMedia('(prefers-color-scheme: dark)').matches) {
+        document.querySelector("html").dataset.theme = 'dark';
+    } else {
+        document.querySelector("html").dataset.theme = 'light';
+    }
+
+</script><meta property="og:url" content="https://vuralpekyilmaz.github.io/en/posts/account-position-calculator-usdtry/">
+  <meta property="og:title" content="Account Position Calculator USDTRY">
+  <meta property="og:description" content="In financial markets, for investors engaged in leveraged trading, accurately reporting account positions is of critical importance.">
+  <meta property="og:locale" content="en">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="posts">
+    <meta property="article:published_time" content="2026-05-15T11:20:00+03:00">
+    <meta property="article:modified_time" content="2026-05-15T11:20:00+03:00">
+    <meta property="article:tag" content="Metatrader5">
+    <meta property="article:tag" content="MQL5">
+    <meta property="article:tag" content="Trading">
+    <meta property="article:tag" content="USDTRY">
+    <meta property="og:image" content="https://vuralpekyilmaz.github.io/images/terminalblack1.png">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:image" content="https://vuralpekyilmaz.github.io/images/terminalblack1.png">
+  <meta name="twitter:title" content="Account Position Calculator USDTRY">
+  <meta name="twitter:description" content="In financial markets, for investors engaged in leveraged trading, accurately reporting account positions is of critical importance.">
+      <meta name="twitter:site" content="@thejvmbender">
+
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position":  1 ,
+      "name": "Article",
+      "item": "https://vuralpekyilmaz.github.io/en/posts/"
+    }, 
+    {
+      "@type": "ListItem",
+      "position":  2 ,
+      "name": "Account Position Calculator USDTRY",
+      "item": "https://vuralpekyilmaz.github.io/en/posts/account-position-calculator-usdtry/"
+    }
+  ]
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BlogPosting",
+  "headline": "Account Position Calculator USDTRY",
+  "name": "Account Position Calculator USDTRY",
+  "description": "In financial markets, for investors engaged in leveraged trading, accurately reporting account positions is of critical importance.",
+  "keywords": [
+    "Metatrader5", "MQL5", "Trading", "USDTRY"
+  ],
+  "articleBody": "Introduction Especially in highly volatile pairs such as USDTRY, incorrectly calculated values of Equity, Margin, Free Margin, and Margin Level can mislead investors and weaken risk management.\nThis article addresses the development of an Account Position Calculator to help investors transparently and reliably track their positions.\nCalculates position size, margin, and floating P/L using precise formulas.\nAutomatically reports Equity, Free Margin, and Margin Level values.\nDisplays outputs in both USD and TRY, enabling dual‑currency tracking.\nThanks to its modular code structure, it can be easily applied to both BUY and SELL scenarios.\nAdditionally, Stop Out Level logic is integrated, providing investors with clear information about risk thresholds.\nLet’s create a new class CAccountPositionCalculator.\n1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 26 27 28 29 30 31 32 33 34 35 36 37 38 39 40 41 42 43 44 45 46 47 48 49 50 51 52 53 54 55 56 57 58 59 60 61 62 63 64 65 66 67 68 69 70 71 72 73 74 75 76 77 78 79 80 81 82 83 84 85 86 87 88 89 90 91 92 93 94 95 96 97 98 99 100 101 102 103 104 105 106 107 108 109 110 111 112 113 114 115 116 117 118 119 120 121 122 123 124 125 126 127 128 129 130 131 132 133 134 135 136 137 138 139 140 141 142 143 144 145 146 147 148 149 150 151 152 153 154 155 156 157 158 159 160 161 162 163 164 165 166 167 168 169 170 171 172 173 174 175 176 177 178 179 180 181 182 183 184 185 186 187 188 189 190 191 192 193 194 195 196 197 198 199 200 201 202 203 204 205 206 207 208 209 210 211 212 213 214 215 216 217 218 219 220 221 222 223 224 225 226 227 228 229 230 231 232 233 234 235 236 237 238 239 240 241 242 243 244 245 246 247 248 //+------------------------------------------------------------------+ //| Copyright 2026, MetaQuotes Ltd. | //| https://www.mql5.com | //| PositionSizeCalculatorUSDTRY.mq5 | //+------------------------------------------------------------------+ //--- Helper function: draw text on chart void DrawLabel(string name,int x,int y,string text,int fontSize,color clr) { if(ObjectFind(0,name) == -1) ObjectCreate(0,name,OBJ_LABEL,0,0,0); ObjectSetInteger(0,name,OBJPROP_CORNER,CORNER_LEFT_UPPER); ObjectSetInteger(0,name,OBJPROP_XDISTANCE,x); ObjectSetInteger(0,name,OBJPROP_YDISTANCE,y); ObjectSetInteger(0,name,OBJPROP_FONTSIZE,fontSize); ObjectSetInteger(0,name,OBJPROP_COLOR,clr); ObjectSetString(0,name,OBJPROP_TEXT,text); } //--- Helper function: background for report block void DrawBackground(string name,int x,int y,int width,int height,color clr) { if(ObjectFind(0,name) == -1) ObjectCreate(0,name,OBJ_RECTANGLE_LABEL,0,0,0); ObjectSetInteger(0,name,OBJPROP_CORNER,CORNER_LEFT_UPPER); ObjectSetInteger(0,name,OBJPROP_XDISTANCE,x); ObjectSetInteger(0,name,OBJPROP_YDISTANCE,y); ObjectSetInteger(0,name,OBJPROP_XSIZE,width); ObjectSetInteger(0,name,OBJPROP_YSIZE,height); ObjectSetInteger(0,name,OBJPROP_BGCOLOR,clr); ObjectSetInteger(0,name,OBJPROP_COLOR,clr); ObjectSetInteger(0,name,OBJPROP_STYLE,STYLE_SOLID); ObjectSetInteger(0,name,OBJPROP_WIDTH,0); ObjectSetString(0,name,OBJPROP_TEXT,\"\"); } //--- Position Calculator class CAccountPositionCalculator { private: // Account information double m_balance; double m_equity; double m_contractSize; double m_leverage; // Order information string m_orderType; string m_symbol; double m_lot; double m_openPrice; double m_currentPrice; double m_stopLoss; double m_takeProfit; double m_commission; double m_swap; public: CAccountPositionCalculator( double bal, double cSize, double lev, string oType, string sym, double l, double oPrice, double cPrice, double sL, double tP, double comm, double sw ) { m_balance = bal; m_equity = bal; m_contractSize = cSize; m_leverage = lev; m_orderType = oType; m_symbol = sym; m_lot = l; m_openPrice = oPrice; m_currentPrice = cPrice; m_stopLoss = sL; m_takeProfit = tP; m_commission = comm; m_swap = sw; } void Report() { // Broker Stop Out Level (%10) double stopOutLevel = 10; // 1 pip = 0.0001 (for 4-digit pairs like USDTRY) double pipSize = 0.0001; double pips = 0; double spread = 0; // Position Size (USD based) // Order size (e.g., 1.00 lot) // Contract Size → Contract size for 1 lot (usually 100,000 in Forex) double positionSize = m_lot * m_contractSize; // Floating P/ L → profit / loss arising from price movement. double profit = 0; double pipValue = 0; if (m_orderType == \"BUY\") { spread = m_openPrice - m_currentPrice; pips = spread / pipSize; pipValue = (positionSize * pipSize) / m_currentPrice; profit = -((spread * positionSize) / m_currentPrice); // The USD value of 1 pip. //profit = -(pips * pipValue); } else if (m_orderType == \"SELL\") { spread = m_currentPrice - m_openPrice; pips = spread / pipSize; pipValue = (positionSize * pipSize) / m_currentPrice; profit = -((spread * positionSize) / m_currentPrice); //profit = -(pips * pipValue); } // Equity double equity = m_balance + profit - m_commission + m_swap; // Margin double margin = positionSize / m_leverage; // Free Margin double freeMargin = equity - margin; // Margin Level double marginLevel = margin \u003e 0 ? (equity / margin) * 100 : 0; // Stop Out Equity Threshold double stopOutEquity = (margin * stopOutLevel) / 100; // === Output in Experts === Print(\"=== Account Position Report (USDTRY v1.0.5-beta) ===\"); Print(\"Balance : \",DoubleToString(m_balance,2),\" USD\"); Print(\"Equity : \",DoubleToString(equity,2),\" USD\"); Print(\"Margin : \",DoubleToString(margin,2),\" USD\"); Print(\"Free Margin : \",DoubleToString(freeMargin,2),\" USD\"); Print(\"Margin Level : \",DoubleToString(marginLevel,2),\" %\"); Print(\"Frofit : \",DoubleToString(profit,2),\" USD\"); Print(\"Spread : \",DoubleToString(spread,4),\" → \",DoubleToString(pips,1),\" pips\"); Print(\"Stop Out Lvl : \",DoubleToString(stopOutLevel,2),\"% → Equity Threshold = \",DoubleToString(stopOutEquity,2),\" USD\"); // === Output on Chart === int y = 55; int step = 80; // Background box DrawBackground(\"bgReport\",10,40,1300,950,clrBlack); // Title DrawLabel(\"lblHeader\",20,y,\"=== Account Position Report (USDTRY v1.0.6-beta) ===\",14,clrYellow); y+=step; // Symbol + Order Info DrawLabel(\"lblSymbol\",20,y,m_symbol + \" - \" + m_orderType + \" - \" + DoubleToString(m_lot,2) +\" lot - \"+ DoubleToString(m_openPrice,5),14,clrWhite); y+=step; // Balance DrawLabel(\"lblBalance\",20,y,\"Balance : \"+DoubleToString(m_balance,2)+\" USD\",14,clrWhite); y+=step; // Equity DrawLabel(\"lblEquity\",20,y,\"Equity : \"+DoubleToString(equity,2)+\" USD\",14,clrGreen); y+=step; // Margin DrawLabel(\"lblMargin\",20,y,\"Margin : \"+DoubleToString(margin,2)+\" USD\",14,clrRed); y+=step; // Free Margin DrawLabel(\"lblFreeMargin\",20,y,\"Free Margin : \"+DoubleToString(freeMargin,2)+\" USD\",14,clrWhite); y+=step; // Margin Level DrawLabel(\"lblMarginLevel\",20,y,\"Margin Level : \"+DoubleToString(marginLevel,2)+\" %\",14,clrWhite); y+=step; // Profit / Floating P/L color profitColor = (profit \u003e= 0 ? clrGreen : clrRed); DrawLabel(\"lblProfit\",20,y,\"Profit P/L : \"+DoubleToString(profit,2)+\" USD\",14,profitColor); y+=step; // Spread DrawLabel(\"lblSpread\",20,y,\"Spread : \"+DoubleToString(spread,5),14,clrWhite); y+=step; // Spread (pips) DrawLabel(\"lblPips\",20,y,\"Spread (pips) : \"+DoubleToString(pips,2)+\" - \"+DoubleToString(pipValue,2)+\" USD per pip\",14,clrWhite); y+=step; // Stop Out Level DrawLabel(\"lblStopOut\",20,y,\"Stop Out Lvl : \"+DoubleToString(stopOutLevel,2)+\"% → Equity Threshold = \"+DoubleToString(stopOutEquity,2)+\" USD\",14,clrWhite); //y+=step; // SL / TP //DrawLabel(\"lblSL\",20,y,\"Stop Loss : \"+DoubleToString(stopLoss,2),14,clrBlue); //y+=step; //DrawLabel(\"lblTP\",20,y,\"Take Profit : \"+DoubleToString(takeProfit,2),14,clrBlue); //y+=step; // Commission \u0026 Swap //DrawLabel(\"lblCommission\",20,y,\"Commission : \"+DoubleToString(m_commission,2)+\" USD\",14,clrWhite); //y+=step; //DrawLabel(\"lblSwap\",20,y,\"Swap : \"+DoubleToString(m_swap,2)+\" USD\",14,clrWhite); //y+=step; } }; //--- Script start int OnStart() { double balance = AccountInfoDouble(ACCOUNT_BALANCE); double leverage = (double)AccountInfoInteger(ACCOUNT_LEVERAGE); CAccountPositionCalculator calc( balance, // balance 100000, // contract leverage, // leverage \"BUY\", // order type \"USDTRY\", // symbol 1.00, // lot 14.8259, // open price 14.8189, // current price 0.0, // stop loss 0.0, // take profit 0.0, // commission 0.0 // swap ); calc.Report(); return(0); } Conclusion In the case of USDTRY, you will obtain an MQL5 script that correctly reports account positions.\nYou will learn how margin and risk management calculations are performed using formulas.\nYou will be able to adapt the code output to your own scenarios, ensuring transparent and reliable reporting.\nAs a result, investors will be able to make more informed decisions and manage their risks more effectively.\n",
+  "wordCount" : "1122",
+  "inLanguage": "en",
+  "image":"https://vuralpekyilmaz.github.io/images/terminalblack1.png","datePublished": "2026-05-15T11:20:00+03:00",
+  "dateModified": "2026-05-15T11:20:00+03:00",
+  "mainEntityOfPage": {
+    "@type": "WebPage",
+    "@id": "https://vuralpekyilmaz.github.io/en/posts/account-position-calculator-usdtry/"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "",
+    "logo": {
+      "@type": "ImageObject",
+      "url": "https://vuralpekyilmaz.github.io/favicon.ico"
+    }
+  }
+}
+</script>
+</head>
+<body id="top">
+    <header class="header">
+    <nav class="header-nav">
+        <div class="logo">
+            <div class="logo-switches">
+                <button id="theme-toggle" class="theme-toggle" accesskey="t" title="(Alt + T)" aria-label="Toggle theme">
+                    <svg class="moon" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                    </svg>
+                    <svg class="sun" xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24"
+                        fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                        stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="5"></circle>
+                        <line x1="12" y1="1" x2="12" y2="3"></line>
+                        <line x1="12" y1="21" x2="12" y2="23"></line>
+                        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                        <line x1="1" y1="12" x2="3" y2="12"></line>
+                        <line x1="21" y1="12" x2="23" y2="12"></line>
+                        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                    </svg>
+                </button><span class="nav-sep">|</span>
+                    <ul class="lang-menu">
+                        <li>
+                            <a href="https://vuralpekyilmaz.github.io/ru/" title="Русский"
+                                aria-label="Русский">Ru</a>
+                        </li>
+                    </ul>
+            </div>
+        </div>
+        <ul id="menu" class="menu">
+            <li>
+                <a href="https://vuralpekyilmaz.github.io/en/" title="Home">
+                    <span>Home</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://vuralpekyilmaz.github.io/en/posts/" title="Post">
+                    <span>Post</span>
+                </a>
+            </li>
+            <li>
+                <a href="https://vuralpekyilmaz.github.io/en/about/" title="About">
+                    <span>About</span>
+                </a>
+            </li>
+        </ul>
+    </nav>
+</header>
+<main class="main">
+
+<article class="post-single">
+  <header class="post-header">
+    <nav class="breadcrumbs" role="navigation" aria-label="Breadcrumb">
+            <a href="https://vuralpekyilmaz.github.io/en/">Home</a>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+                stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+                <polyline points="9 18 15 12 9 6"></polyline>
+            </svg>
+            <a href="https://vuralpekyilmaz.github.io/en/posts/">Article</a>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevron-right">
+        <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+</nav>
+    <h1 class="post-title entry-hint-parent">
+      Account Position Calculator USDTRY
+    </h1>
+    <div class="post-description">
+      In financial markets, for investors engaged in leveraged trading, accurately reporting account positions is of critical importance.
+    </div>
+    <div class="post-meta">
+
+<span title='2026-05-15 11:20:00 +0300 +03'>May 15, 2026</span>&nbsp;·&nbsp;<span>6 min</span>&nbsp;|&nbsp;<span>Translations:</span>
+    <ul class="i18n_list">
+        <li>
+            <a href="https://vuralpekyilmaz.github.io/ru/posts/account-position-calculator-usdtry/">Ru</a>
+        </li>
+    </ul>
+
+</div>
+  </header> 
+<figure class="entry-cover">
+        <img loading="eager" src="https://vuralpekyilmaz.github.io/images/terminalblack1.png" alt="Account Position Calculator USDTRY">
+        
+</figure>
+  <div class="post-content md-content"><h2 id="introduction">Introduction<a hidden class="anchor" aria-hidden="true" href="#introduction">#</a></h2>
+<p>Especially in highly volatile pairs such as USDTRY, incorrectly calculated values of Equity, Margin, Free Margin, and Margin Level can mislead investors and weaken risk management.</p>
+<p>This article addresses the development of an Account Position Calculator to help investors transparently and reliably track their positions.</p>
+<p>Calculates position size, margin, and floating P/L using precise formulas.</p>
+<p>Automatically reports Equity, Free Margin, and Margin Level values.</p>
+<p>Displays outputs in both USD and TRY, enabling dual‑currency tracking.</p>
+<p>Thanks to its modular code structure, it can be easily applied to both BUY and SELL scenarios.</p>
+<p>Additionally, Stop Out Level logic is integrated, providing investors with clear information about risk thresholds.</p>
+<p>Let&rsquo;s create a new class CAccountPositionCalculator.</p>
+<div class="highlight"><div style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;">
+<table style="border-spacing:0;padding:0;margin:0;border:0;"><tr><td style="vertical-align:top;padding:0;margin:0;border:0;">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  1
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  2
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  3
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  4
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  5
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  6
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  7
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  8
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">  9
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 10
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 11
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 12
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 13
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 14
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 15
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 16
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 17
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 18
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 19
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 20
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 21
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 22
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 23
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 24
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 25
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 26
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 27
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 28
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 29
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 30
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 31
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 32
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 33
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 34
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 35
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 36
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 37
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 38
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 39
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 40
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 41
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 42
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 43
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 44
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 45
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 46
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 47
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 48
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 49
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 50
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 51
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 52
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 53
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 54
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 55
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 56
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 57
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 58
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 59
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 60
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 61
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 62
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 63
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 64
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 65
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 66
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 67
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 68
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 69
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 70
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 71
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 72
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 73
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 74
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 75
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 76
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 77
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 78
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 79
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 80
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 81
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 82
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 83
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 84
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 85
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 86
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 87
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 88
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 89
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 90
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 91
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 92
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 93
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 94
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 95
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 96
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 97
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 98
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f"> 99
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">100
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">101
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">102
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">103
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">104
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">105
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">106
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">107
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">108
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">109
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">110
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">111
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">112
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">113
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">114
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">115
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">116
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">117
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">118
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">119
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">120
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">121
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">122
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">123
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">124
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">125
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">126
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">127
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">128
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">129
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">130
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">131
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">132
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">133
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">134
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">135
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">136
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">137
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">138
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">139
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">140
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">141
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">142
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">143
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">144
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">145
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">146
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">147
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">148
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">149
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">150
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">151
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">152
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">153
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">154
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">155
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">156
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">157
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">158
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">159
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">160
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">161
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">162
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">163
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">164
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">165
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">166
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">167
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">168
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">169
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">170
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">171
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">172
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">173
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">174
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">175
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">176
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">177
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">178
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">179
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">180
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">181
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">182
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">183
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">184
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">185
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">186
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">187
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">188
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">189
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">190
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">191
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">192
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">193
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">194
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">195
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">196
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">197
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">198
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">199
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">200
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">201
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">202
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">203
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">204
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">205
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">206
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">207
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">208
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">209
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">210
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">211
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">212
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">213
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">214
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">215
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">216
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">217
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">218
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">219
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">220
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">221
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">222
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">223
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">224
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">225
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">226
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">227
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">228
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">229
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">230
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">231
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">232
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">233
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">234
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">235
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">236
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">237
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">238
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">239
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">240
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">241
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">242
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">243
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">244
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">245
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">246
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">247
+</span><span style="white-space:pre;-webkit-user-select:none;user-select:none;margin-right:0.4em;padding:0 0.4em 0 0.4em;color:#7f7f7f">248
+</span></code></pre></td>
+<td style="vertical-align:top;padding:0;margin:0;border:0;;width:100%">
+<pre tabindex="0" style="color:#f8f8f2;background-color:#282a36;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-cpp" data-lang="cpp"><span style="display:flex;"><span><span style="color:#6272a4">//+------------------------------------------------------------------+
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//|                                  Copyright 2026, MetaQuotes Ltd. |
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//|                                             https://www.mql5.com |
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//| PositionSizeCalculatorUSDTRY.mq5                                 |
+</span></span></span><span style="display:flex;"><span><span style="color:#6272a4">//+------------------------------------------------------------------+
+</span></span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">//--- Helper function: draw text on chart
+</span></span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">DrawLabel</span>(string name,<span style="color:#8be9fd">int</span> x,<span style="color:#8be9fd">int</span> y,string text,<span style="color:#8be9fd">int</span> fontSize,color clr)
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>   <span style="color:#ff79c6">if</span>(ObjectFind(<span style="color:#bd93f9">0</span>,name) <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>      ObjectCreate(<span style="color:#bd93f9">0</span>,name,OBJ_LABEL,<span style="color:#bd93f9">0</span>,<span style="color:#bd93f9">0</span>,<span style="color:#bd93f9">0</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   ObjectSetInteger(<span style="color:#bd93f9">0</span>,name,OBJPROP_CORNER,CORNER_LEFT_UPPER);
+</span></span><span style="display:flex;"><span>   ObjectSetInteger(<span style="color:#bd93f9">0</span>,name,OBJPROP_XDISTANCE,x);
+</span></span><span style="display:flex;"><span>   ObjectSetInteger(<span style="color:#bd93f9">0</span>,name,OBJPROP_YDISTANCE,y);
+</span></span><span style="display:flex;"><span>   ObjectSetInteger(<span style="color:#bd93f9">0</span>,name,OBJPROP_FONTSIZE,fontSize);
+</span></span><span style="display:flex;"><span>   ObjectSetInteger(<span style="color:#bd93f9">0</span>,name,OBJPROP_COLOR,clr);
+</span></span><span style="display:flex;"><span>   ObjectSetString(<span style="color:#bd93f9">0</span>,name,OBJPROP_TEXT,text);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">//--- Helper function: background for report block
+</span></span></span><span style="display:flex;"><span><span style="color:#8be9fd">void</span> <span style="color:#50fa7b">DrawBackground</span>(string name,<span style="color:#8be9fd">int</span> x,<span style="color:#8be9fd">int</span> y,<span style="color:#8be9fd">int</span> width,<span style="color:#8be9fd">int</span> height,color clr)
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>   <span style="color:#ff79c6">if</span>(ObjectFind(<span style="color:#bd93f9">0</span>,name) <span style="color:#ff79c6">==</span> <span style="color:#ff79c6">-</span><span style="color:#bd93f9">1</span>)
+</span></span><span style="display:flex;"><span>      ObjectCreate(<span style="color:#bd93f9">0</span>,name,OBJ_RECTANGLE_LABEL,<span style="color:#bd93f9">0</span>,<span style="color:#bd93f9">0</span>,<span style="color:#bd93f9">0</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   ObjectSetInteger(<span style="color:#bd93f9">0</span>,name,OBJPROP_CORNER,CORNER_LEFT_UPPER);
+</span></span><span style="display:flex;"><span>   ObjectSetInteger(<span style="color:#bd93f9">0</span>,name,OBJPROP_XDISTANCE,x);
+</span></span><span style="display:flex;"><span>   ObjectSetInteger(<span style="color:#bd93f9">0</span>,name,OBJPROP_YDISTANCE,y);
+</span></span><span style="display:flex;"><span>   ObjectSetInteger(<span style="color:#bd93f9">0</span>,name,OBJPROP_XSIZE,width);
+</span></span><span style="display:flex;"><span>   ObjectSetInteger(<span style="color:#bd93f9">0</span>,name,OBJPROP_YSIZE,height);
+</span></span><span style="display:flex;"><span>   ObjectSetInteger(<span style="color:#bd93f9">0</span>,name,OBJPROP_BGCOLOR,clr);
+</span></span><span style="display:flex;"><span>   ObjectSetInteger(<span style="color:#bd93f9">0</span>,name,OBJPROP_COLOR,clr);
+</span></span><span style="display:flex;"><span>   ObjectSetInteger(<span style="color:#bd93f9">0</span>,name,OBJPROP_STYLE,STYLE_SOLID);
+</span></span><span style="display:flex;"><span>   ObjectSetInteger(<span style="color:#bd93f9">0</span>,name,OBJPROP_WIDTH,<span style="color:#bd93f9">0</span>);
+</span></span><span style="display:flex;"><span>   ObjectSetString(<span style="color:#bd93f9">0</span>,name,OBJPROP_TEXT,<span style="color:#f1fa8c">&#34;&#34;</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">//--- Position Calculator
+</span></span></span><span style="display:flex;"><span><span style="color:#ff79c6">class</span> <span style="color:#50fa7b">CAccountPositionCalculator</span>
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">private</span><span style="color:#ff79c6">:</span>
+</span></span><span style="display:flex;"><span>   <span style="color:#6272a4">// Account information
+</span></span></span><span style="display:flex;"><span>   <span style="color:#8be9fd">double</span> m_balance;   
+</span></span><span style="display:flex;"><span>   <span style="color:#8be9fd">double</span> m_equity;
+</span></span><span style="display:flex;"><span>   <span style="color:#8be9fd">double</span> m_contractSize;
+</span></span><span style="display:flex;"><span>   <span style="color:#8be9fd">double</span> m_leverage;
+</span></span><span style="display:flex;"><span>   
+</span></span><span style="display:flex;"><span>   <span style="color:#6272a4">// Order information
+</span></span></span><span style="display:flex;"><span>   string m_orderType;
+</span></span><span style="display:flex;"><span>   string m_symbol;
+</span></span><span style="display:flex;"><span>   <span style="color:#8be9fd">double</span> m_lot;
+</span></span><span style="display:flex;"><span>   <span style="color:#8be9fd">double</span> m_openPrice;
+</span></span><span style="display:flex;"><span>   <span style="color:#8be9fd">double</span> m_currentPrice;
+</span></span><span style="display:flex;"><span>   <span style="color:#8be9fd">double</span> m_stopLoss;
+</span></span><span style="display:flex;"><span>   <span style="color:#8be9fd">double</span> m_takeProfit;
+</span></span><span style="display:flex;"><span>   <span style="color:#8be9fd">double</span> m_commission;
+</span></span><span style="display:flex;"><span>   <span style="color:#8be9fd">double</span> m_swap;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#ff79c6">public</span><span style="color:#ff79c6">:</span>   
+</span></span><span style="display:flex;"><span>   CAccountPositionCalculator(
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> bal, 
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> cSize, 
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> lev,
+</span></span><span style="display:flex;"><span>      string oType,
+</span></span><span style="display:flex;"><span>      string sym,
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> l,
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> oPrice,
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> cPrice,
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> sL,
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> tP,
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> comm,
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> sw
+</span></span><span style="display:flex;"><span>   )
+</span></span><span style="display:flex;"><span>     {
+</span></span><span style="display:flex;"><span>      m_balance      <span style="color:#ff79c6">=</span> bal;  
+</span></span><span style="display:flex;"><span>      m_equity       <span style="color:#ff79c6">=</span> bal;      
+</span></span><span style="display:flex;"><span>      m_contractSize <span style="color:#ff79c6">=</span> cSize;
+</span></span><span style="display:flex;"><span>      m_leverage     <span style="color:#ff79c6">=</span> lev;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      m_orderType    <span style="color:#ff79c6">=</span> oType;
+</span></span><span style="display:flex;"><span>      m_symbol       <span style="color:#ff79c6">=</span> sym;
+</span></span><span style="display:flex;"><span>      m_lot          <span style="color:#ff79c6">=</span> l;
+</span></span><span style="display:flex;"><span>      m_openPrice    <span style="color:#ff79c6">=</span> oPrice;
+</span></span><span style="display:flex;"><span>      m_currentPrice <span style="color:#ff79c6">=</span> cPrice;
+</span></span><span style="display:flex;"><span>      m_stopLoss     <span style="color:#ff79c6">=</span> sL;
+</span></span><span style="display:flex;"><span>      m_takeProfit   <span style="color:#ff79c6">=</span> tP;
+</span></span><span style="display:flex;"><span>      m_commission   <span style="color:#ff79c6">=</span> comm;
+</span></span><span style="display:flex;"><span>      m_swap         <span style="color:#ff79c6">=</span> sw;
+</span></span><span style="display:flex;"><span>     }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   <span style="color:#8be9fd">void</span> <span style="color:#50fa7b">Report</span>()
+</span></span><span style="display:flex;"><span>     {
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Broker Stop Out Level (%10)
+</span></span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> stopOutLevel <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">10</span>;
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// 1 pip = 0.0001 (for 4-digit pairs like USDTRY)
+</span></span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> pipSize <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0.0001</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> pips <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> spread <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;        
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Position Size (USD based)
+</span></span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Order size (e.g., 1.00 lot)
+</span></span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Contract Size → Contract size for 1 lot (usually 100,000 in Forex)
+</span></span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> positionSize <span style="color:#ff79c6">=</span> m_lot <span style="color:#ff79c6">*</span> m_contractSize;
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Floating P/ L → profit / loss arising from price movement.
+</span></span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> profit <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> pipValue <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">if</span> (m_orderType <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#34;BUY&#34;</span>)
+</span></span><span style="display:flex;"><span>      {
+</span></span><span style="display:flex;"><span>          spread <span style="color:#ff79c6">=</span> m_openPrice <span style="color:#ff79c6">-</span> m_currentPrice;
+</span></span><span style="display:flex;"><span>          pips <span style="color:#ff79c6">=</span> spread <span style="color:#ff79c6">/</span> pipSize;
+</span></span><span style="display:flex;"><span>          pipValue <span style="color:#ff79c6">=</span> (positionSize <span style="color:#ff79c6">*</span> pipSize) <span style="color:#ff79c6">/</span> m_currentPrice;      
+</span></span><span style="display:flex;"><span>          profit <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">-</span>((spread <span style="color:#ff79c6">*</span> positionSize) <span style="color:#ff79c6">/</span> m_currentPrice); <span style="color:#6272a4">// The USD value of 1 pip.
+</span></span></span><span style="display:flex;"><span>          <span style="color:#6272a4">//profit = -(pips * pipValue); 
+</span></span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>      <span style="color:#ff79c6">else</span> <span style="color:#ff79c6">if</span> (m_orderType <span style="color:#ff79c6">==</span> <span style="color:#f1fa8c">&#34;SELL&#34;</span>)
+</span></span><span style="display:flex;"><span>      {
+</span></span><span style="display:flex;"><span>          spread <span style="color:#ff79c6">=</span> m_currentPrice <span style="color:#ff79c6">-</span> m_openPrice;
+</span></span><span style="display:flex;"><span>          pips <span style="color:#ff79c6">=</span> spread <span style="color:#ff79c6">/</span> pipSize;
+</span></span><span style="display:flex;"><span>          pipValue <span style="color:#ff79c6">=</span> (positionSize <span style="color:#ff79c6">*</span> pipSize) <span style="color:#ff79c6">/</span> m_currentPrice;
+</span></span><span style="display:flex;"><span>          profit <span style="color:#ff79c6">=</span> <span style="color:#ff79c6">-</span>((spread <span style="color:#ff79c6">*</span> positionSize) <span style="color:#ff79c6">/</span> m_currentPrice);
+</span></span><span style="display:flex;"><span>          <span style="color:#6272a4">//profit = -(pips * pipValue); 
+</span></span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>             
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Equity
+</span></span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> equity <span style="color:#ff79c6">=</span> m_balance <span style="color:#ff79c6">+</span> profit <span style="color:#ff79c6">-</span> m_commission <span style="color:#ff79c6">+</span> m_swap;
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Margin
+</span></span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> margin <span style="color:#ff79c6">=</span> positionSize <span style="color:#ff79c6">/</span> m_leverage;
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Free Margin
+</span></span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> freeMargin <span style="color:#ff79c6">=</span> equity <span style="color:#ff79c6">-</span> margin;
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Margin Level
+</span></span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> marginLevel <span style="color:#ff79c6">=</span> margin <span style="color:#ff79c6">&gt;</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">?</span> (equity <span style="color:#ff79c6">/</span> margin) <span style="color:#ff79c6">*</span> <span style="color:#bd93f9">100</span> <span style="color:#ff79c6">:</span> <span style="color:#bd93f9">0</span>;
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Stop Out Equity Threshold
+</span></span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">double</span> stopOutEquity <span style="color:#ff79c6">=</span> (margin <span style="color:#ff79c6">*</span> stopOutLevel) <span style="color:#ff79c6">/</span> <span style="color:#bd93f9">100</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// === Output in Experts ===
+</span></span></span><span style="display:flex;"><span>      Print(<span style="color:#f1fa8c">&#34;=== Account Position Report (USDTRY v1.0.5-beta) ===&#34;</span>);            
+</span></span><span style="display:flex;"><span>      Print(<span style="color:#f1fa8c">&#34;Balance      : &#34;</span>,DoubleToString(m_balance,<span style="color:#bd93f9">2</span>),<span style="color:#f1fa8c">&#34; USD&#34;</span>);      
+</span></span><span style="display:flex;"><span>      Print(<span style="color:#f1fa8c">&#34;Equity       : &#34;</span>,DoubleToString(equity,<span style="color:#bd93f9">2</span>),<span style="color:#f1fa8c">&#34; USD&#34;</span>);      
+</span></span><span style="display:flex;"><span>      Print(<span style="color:#f1fa8c">&#34;Margin       : &#34;</span>,DoubleToString(margin,<span style="color:#bd93f9">2</span>),<span style="color:#f1fa8c">&#34; USD&#34;</span>);
+</span></span><span style="display:flex;"><span>      Print(<span style="color:#f1fa8c">&#34;Free Margin  : &#34;</span>,DoubleToString(freeMargin,<span style="color:#bd93f9">2</span>),<span style="color:#f1fa8c">&#34; USD&#34;</span>);
+</span></span><span style="display:flex;"><span>      Print(<span style="color:#f1fa8c">&#34;Margin Level : &#34;</span>,DoubleToString(marginLevel,<span style="color:#bd93f9">2</span>),<span style="color:#f1fa8c">&#34; %&#34;</span>);
+</span></span><span style="display:flex;"><span>      Print(<span style="color:#f1fa8c">&#34;Frofit       : &#34;</span>,DoubleToString(profit,<span style="color:#bd93f9">2</span>),<span style="color:#f1fa8c">&#34; USD&#34;</span>);
+</span></span><span style="display:flex;"><span>      Print(<span style="color:#f1fa8c">&#34;Spread       : &#34;</span>,DoubleToString(spread,<span style="color:#bd93f9">4</span>),<span style="color:#f1fa8c">&#34; → &#34;</span>,DoubleToString(pips,<span style="color:#bd93f9">1</span>),<span style="color:#f1fa8c">&#34; pips&#34;</span>);
+</span></span><span style="display:flex;"><span>      Print(<span style="color:#f1fa8c">&#34;Stop Out Lvl : &#34;</span>,DoubleToString(stopOutLevel,<span style="color:#bd93f9">2</span>),<span style="color:#f1fa8c">&#34;% → Equity Threshold = &#34;</span>,DoubleToString(stopOutEquity,<span style="color:#bd93f9">2</span>),<span style="color:#f1fa8c">&#34; USD&#34;</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// === Output on Chart ===
+</span></span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">int</span> y <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">55</span>;
+</span></span><span style="display:flex;"><span>      <span style="color:#8be9fd">int</span> step <span style="color:#ff79c6">=</span> <span style="color:#bd93f9">80</span>;
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Background box
+</span></span></span><span style="display:flex;"><span>      DrawBackground(<span style="color:#f1fa8c">&#34;bgReport&#34;</span>,<span style="color:#bd93f9">10</span>,<span style="color:#bd93f9">40</span>,<span style="color:#bd93f9">1300</span>,<span style="color:#bd93f9">950</span>,clrBlack);
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Title
+</span></span></span><span style="display:flex;"><span>      DrawLabel(<span style="color:#f1fa8c">&#34;lblHeader&#34;</span>,<span style="color:#bd93f9">20</span>,y,<span style="color:#f1fa8c">&#34;=== Account Position Report (USDTRY v1.0.6-beta) ===&#34;</span>,<span style="color:#bd93f9">14</span>,clrYellow); 
+</span></span><span style="display:flex;"><span>      y<span style="color:#ff79c6">+=</span>step;
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Symbol + Order Info
+</span></span></span><span style="display:flex;"><span>      DrawLabel(<span style="color:#f1fa8c">&#34;lblSymbol&#34;</span>,<span style="color:#bd93f9">20</span>,y,m_symbol <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; - &#34;</span> <span style="color:#ff79c6">+</span> m_orderType <span style="color:#ff79c6">+</span> <span style="color:#f1fa8c">&#34; - &#34;</span> <span style="color:#ff79c6">+</span> DoubleToString(m_lot,<span style="color:#bd93f9">2</span>) <span style="color:#ff79c6">+</span><span style="color:#f1fa8c">&#34; lot - &#34;</span><span style="color:#ff79c6">+</span> DoubleToString(m_openPrice,<span style="color:#bd93f9">5</span>),<span style="color:#bd93f9">14</span>,clrWhite); 
+</span></span><span style="display:flex;"><span>      y<span style="color:#ff79c6">+=</span>step;
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Balance
+</span></span></span><span style="display:flex;"><span>      DrawLabel(<span style="color:#f1fa8c">&#34;lblBalance&#34;</span>,<span style="color:#bd93f9">20</span>,y,<span style="color:#f1fa8c">&#34;Balance        : &#34;</span><span style="color:#ff79c6">+</span>DoubleToString(m_balance,<span style="color:#bd93f9">2</span>)<span style="color:#ff79c6">+</span><span style="color:#f1fa8c">&#34; USD&#34;</span>,<span style="color:#bd93f9">14</span>,clrWhite); 
+</span></span><span style="display:flex;"><span>      y<span style="color:#ff79c6">+=</span>step;
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Equity
+</span></span></span><span style="display:flex;"><span>      DrawLabel(<span style="color:#f1fa8c">&#34;lblEquity&#34;</span>,<span style="color:#bd93f9">20</span>,y,<span style="color:#f1fa8c">&#34;Equity         : &#34;</span><span style="color:#ff79c6">+</span>DoubleToString(equity,<span style="color:#bd93f9">2</span>)<span style="color:#ff79c6">+</span><span style="color:#f1fa8c">&#34; USD&#34;</span>,<span style="color:#bd93f9">14</span>,clrGreen); 
+</span></span><span style="display:flex;"><span>      y<span style="color:#ff79c6">+=</span>step;
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Margin
+</span></span></span><span style="display:flex;"><span>      DrawLabel(<span style="color:#f1fa8c">&#34;lblMargin&#34;</span>,<span style="color:#bd93f9">20</span>,y,<span style="color:#f1fa8c">&#34;Margin         : &#34;</span><span style="color:#ff79c6">+</span>DoubleToString(margin,<span style="color:#bd93f9">2</span>)<span style="color:#ff79c6">+</span><span style="color:#f1fa8c">&#34; USD&#34;</span>,<span style="color:#bd93f9">14</span>,clrRed); 
+</span></span><span style="display:flex;"><span>      y<span style="color:#ff79c6">+=</span>step;
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Free Margin
+</span></span></span><span style="display:flex;"><span>      DrawLabel(<span style="color:#f1fa8c">&#34;lblFreeMargin&#34;</span>,<span style="color:#bd93f9">20</span>,y,<span style="color:#f1fa8c">&#34;Free Margin    : &#34;</span><span style="color:#ff79c6">+</span>DoubleToString(freeMargin,<span style="color:#bd93f9">2</span>)<span style="color:#ff79c6">+</span><span style="color:#f1fa8c">&#34; USD&#34;</span>,<span style="color:#bd93f9">14</span>,clrWhite); 
+</span></span><span style="display:flex;"><span>      y<span style="color:#ff79c6">+=</span>step;
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Margin Level
+</span></span></span><span style="display:flex;"><span>      DrawLabel(<span style="color:#f1fa8c">&#34;lblMarginLevel&#34;</span>,<span style="color:#bd93f9">20</span>,y,<span style="color:#f1fa8c">&#34;Margin Level   : &#34;</span><span style="color:#ff79c6">+</span>DoubleToString(marginLevel,<span style="color:#bd93f9">2</span>)<span style="color:#ff79c6">+</span><span style="color:#f1fa8c">&#34; %&#34;</span>,<span style="color:#bd93f9">14</span>,clrWhite); 
+</span></span><span style="display:flex;"><span>      y<span style="color:#ff79c6">+=</span>step;
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Profit / Floating P/L
+</span></span></span><span style="display:flex;"><span>      color profitColor <span style="color:#ff79c6">=</span> (profit <span style="color:#ff79c6">&gt;=</span> <span style="color:#bd93f9">0</span> <span style="color:#ff79c6">?</span> <span style="color:#8be9fd;font-style:italic">clrGreen</span> : clrRed);
+</span></span><span style="display:flex;"><span>      DrawLabel(<span style="color:#f1fa8c">&#34;lblProfit&#34;</span>,<span style="color:#bd93f9">20</span>,y,<span style="color:#f1fa8c">&#34;Profit P/L     : &#34;</span><span style="color:#ff79c6">+</span>DoubleToString(profit,<span style="color:#bd93f9">2</span>)<span style="color:#ff79c6">+</span><span style="color:#f1fa8c">&#34; USD&#34;</span>,<span style="color:#bd93f9">14</span>,profitColor); 
+</span></span><span style="display:flex;"><span>      y<span style="color:#ff79c6">+=</span>step;
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Spread
+</span></span></span><span style="display:flex;"><span>      DrawLabel(<span style="color:#f1fa8c">&#34;lblSpread&#34;</span>,<span style="color:#bd93f9">20</span>,y,<span style="color:#f1fa8c">&#34;Spread         : &#34;</span><span style="color:#ff79c6">+</span>DoubleToString(spread,<span style="color:#bd93f9">5</span>),<span style="color:#bd93f9">14</span>,clrWhite); 
+</span></span><span style="display:flex;"><span>      y<span style="color:#ff79c6">+=</span>step;
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Spread (pips)
+</span></span></span><span style="display:flex;"><span>      DrawLabel(<span style="color:#f1fa8c">&#34;lblPips&#34;</span>,<span style="color:#bd93f9">20</span>,y,<span style="color:#f1fa8c">&#34;Spread (pips)  : &#34;</span><span style="color:#ff79c6">+</span>DoubleToString(pips,<span style="color:#bd93f9">2</span>)<span style="color:#ff79c6">+</span><span style="color:#f1fa8c">&#34; - &#34;</span><span style="color:#ff79c6">+</span>DoubleToString(pipValue,<span style="color:#bd93f9">2</span>)<span style="color:#ff79c6">+</span><span style="color:#f1fa8c">&#34; USD per pip&#34;</span>,<span style="color:#bd93f9">14</span>,clrWhite); 
+</span></span><span style="display:flex;"><span>      y<span style="color:#ff79c6">+=</span>step;
+</span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Stop Out Level
+</span></span></span><span style="display:flex;"><span>      DrawLabel(<span style="color:#f1fa8c">&#34;lblStopOut&#34;</span>,<span style="color:#bd93f9">20</span>,y,<span style="color:#f1fa8c">&#34;Stop Out Lvl   : &#34;</span><span style="color:#ff79c6">+</span>DoubleToString(stopOutLevel,<span style="color:#bd93f9">2</span>)<span style="color:#ff79c6">+</span><span style="color:#f1fa8c">&#34;% → Equity Threshold = &#34;</span><span style="color:#ff79c6">+</span>DoubleToString(stopOutEquity,<span style="color:#bd93f9">2</span>)<span style="color:#ff79c6">+</span><span style="color:#f1fa8c">&#34; USD&#34;</span>,<span style="color:#bd93f9">14</span>,clrWhite); 
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">//y+=step;
+</span></span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// SL / TP
+</span></span></span><span style="display:flex;"><span>      <span style="color:#6272a4">//DrawLabel(&#34;lblSL&#34;,20,y,&#34;Stop Loss      : &#34;+DoubleToString(stopLoss,2),14,clrBlue); 
+</span></span></span><span style="display:flex;"><span>      <span style="color:#6272a4">//y+=step;
+</span></span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">//DrawLabel(&#34;lblTP&#34;,20,y,&#34;Take Profit    : &#34;+DoubleToString(takeProfit,2),14,clrBlue); 
+</span></span></span><span style="display:flex;"><span>      <span style="color:#6272a4">//y+=step;
+</span></span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">// Commission &amp; Swap
+</span></span></span><span style="display:flex;"><span>      <span style="color:#6272a4">//DrawLabel(&#34;lblCommission&#34;,20,y,&#34;Commission     : &#34;+DoubleToString(m_commission,2)+&#34; USD&#34;,14,clrWhite); 
+</span></span></span><span style="display:flex;"><span>      <span style="color:#6272a4">//y+=step;
+</span></span></span><span style="display:flex;"><span>      
+</span></span><span style="display:flex;"><span>      <span style="color:#6272a4">//DrawLabel(&#34;lblSwap&#34;,20,y,&#34;Swap           : &#34;+DoubleToString(m_swap,2)+&#34; USD&#34;,14,clrWhite); 
+</span></span></span><span style="display:flex;"><span>      <span style="color:#6272a4">//y+=step;
+</span></span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>     }
+</span></span><span style="display:flex;"><span>  };
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#6272a4">//--- Script start
+</span></span></span><span style="display:flex;"><span><span style="color:#8be9fd">int</span> <span style="color:#50fa7b">OnStart</span>()
+</span></span><span style="display:flex;"><span>  {
+</span></span><span style="display:flex;"><span>   <span style="color:#8be9fd">double</span> balance    <span style="color:#ff79c6">=</span> AccountInfoDouble(ACCOUNT_BALANCE);
+</span></span><span style="display:flex;"><span>   <span style="color:#8be9fd">double</span> leverage   <span style="color:#ff79c6">=</span> (<span style="color:#8be9fd">double</span>)AccountInfoInteger(ACCOUNT_LEVERAGE);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   CAccountPositionCalculator calc(
+</span></span><span style="display:flex;"><span>      balance,    <span style="color:#6272a4">// balance
+</span></span></span><span style="display:flex;"><span>      <span style="color:#bd93f9">100000</span>,     <span style="color:#6272a4">// contract
+</span></span></span><span style="display:flex;"><span>      leverage,   <span style="color:#6272a4">// leverage
+</span></span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;BUY&#34;</span>,      <span style="color:#6272a4">// order type
+</span></span></span><span style="display:flex;"><span>      <span style="color:#f1fa8c">&#34;USDTRY&#34;</span>,   <span style="color:#6272a4">// symbol
+</span></span></span><span style="display:flex;"><span>      <span style="color:#bd93f9">1.00</span>,       <span style="color:#6272a4">// lot
+</span></span></span><span style="display:flex;"><span>      <span style="color:#bd93f9">14.8259</span>,    <span style="color:#6272a4">// open price
+</span></span></span><span style="display:flex;"><span>      <span style="color:#bd93f9">14.8189</span>,    <span style="color:#6272a4">// current price
+</span></span></span><span style="display:flex;"><span>      <span style="color:#bd93f9">0.0</span>,        <span style="color:#6272a4">// stop loss
+</span></span></span><span style="display:flex;"><span>      <span style="color:#bd93f9">0.0</span>,        <span style="color:#6272a4">// take profit
+</span></span></span><span style="display:flex;"><span>      <span style="color:#bd93f9">0.0</span>,        <span style="color:#6272a4">// commission
+</span></span></span><span style="display:flex;"><span>      <span style="color:#bd93f9">0.0</span>         <span style="color:#6272a4">// swap
+</span></span></span><span style="display:flex;"><span>   );
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>   calc.Report();
+</span></span><span style="display:flex;"><span>   <span style="color:#ff79c6">return</span>(<span style="color:#bd93f9">0</span>);
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></td></tr></table>
+</div>
+</div><h2 id="conclusion">Conclusion<a hidden class="anchor" aria-hidden="true" href="#conclusion">#</a></h2>
+<p>In the case of USDTRY, you will obtain an MQL5 script that correctly reports account positions.</p>
+<p>You will learn how margin and risk management calculations are performed using formulas.</p>
+<p>You will be able to adapt the code output to your own scenarios, ensuring transparent and reliable reporting.</p>
+<p>As a result, investors will be able to make more informed decisions and manage their risks more effectively.</p>
+
+
+  </div><div class="partialExtendAuthorBox">
+  <h3>EXTEND POST CONTENT</h3>
+  <p>EXTEND POST CONTENT</p>  
+</div>
+
+
+
+  <section class="related-posts">
+    <h2>Related Posts</h2>
+    <ul>
+      
+      
+        
+      
+        
+          <li>
+            <a href="https://vuralpekyilmaz.github.io/en/posts/second-post/">Second Article</a>
+          </li>
+        
+      
+        
+          <li>
+            <a href="https://vuralpekyilmaz.github.io/en/posts/first-post/">First Article</a>
+          </li>
+        
+      
+    </ul>
+  </section>
+
+
+
+  <footer class="post-footer">
+    <ul class="post-tags">
+      <li><a href="https://vuralpekyilmaz.github.io/en/tags/metatrader5/">Metatrader5</a></li>
+      <li><a href="https://vuralpekyilmaz.github.io/en/tags/mql5/">MQL5</a></li>
+      <li><a href="https://vuralpekyilmaz.github.io/en/tags/trading/">Trading</a></li>
+      <li><a href="https://vuralpekyilmaz.github.io/en/tags/usdtry/">USDTRY</a></li>
+    </ul>
+  </footer>
+</article>
+    </main>
+    
+<footer class="footer">
+        <span>&copy; 2026 <a href="https://vuralpekyilmaz.github.io/en/"></a></span> · 
+
+    
+    
+    <span>
+        Powered by
+        <a href="https://gohugo.io/?utm_source=papermod" rel="noopener" target="_blank">Hugo</a> &
+        <a href="https://github.com/adityatelange/hugo-PaperMod/" rel="noopener" target="_blank">PaperMod</a>
+    </span>
+</footer>
+<a href="#top" id="top-link" class="top-link hidden" aria-label="go to top" title="Go to Top (Alt + G)" accesskey="g">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
+        stroke-linecap="round" stroke-linejoin="round" class="feather feather-chevrons-up">
+        <polyline points="17 11 12 6 7 11"></polyline>
+        <polyline points="17 18 12 13 7 18"></polyline>
+    </svg>
+</a>
+
+<script>
+    let menu = document.getElementById('menu');
+    if (menu) {
+        
+        const scrollPosition = localStorage.getItem("menu-scroll-position");
+        if (scrollPosition) {
+            menu.scrollLeft = parseInt(scrollPosition, 10);
+        }
+        
+        menu.onscroll = function () {
+            localStorage.setItem("menu-scroll-position", menu.scrollLeft);
+        }
+    }
+
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener("click", function (e) {
+            e.preventDefault();
+            var id = this.getAttribute("href").substr(1);
+            if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView({
+                    behavior: "smooth"
+                });
+            } else {
+                document.querySelector(`[id='${decodeURIComponent(id)}']`).scrollIntoView();
+            }
+            if (id === "top") {
+                history.replaceState(null, null, " ");
+            } else {
+                history.pushState(null, null, `#${id}`);
+            }
+        });
+    });
+
+</script>
+<script>
+    var toplink = document.getElementById("top-link");
+    window.onscroll = function () {
+        const scrollThreshold = window.innerHeight;
+        if (document.body.scrollTop > scrollThreshold || document.documentElement.scrollTop > scrollThreshold) {
+            toplink.classList.remove("hidden");
+        } else {
+            toplink.classList.add("hidden");
+        }
+    };
+
+</script>
+<script>
+    document.getElementById("theme-toggle").addEventListener("click", () => {
+        const html = document.querySelector("html");
+        if (html.dataset.theme === "dark") {
+            html.dataset.theme = 'light';
+            localStorage.setItem("pref-theme", 'light');
+        } else {
+            html.dataset.theme = 'dark';
+            localStorage.setItem("pref-theme", 'dark');
+        }
+    })
+
+</script>
+<script>
+    document.querySelectorAll('pre > code').forEach((codeblock) => {
+        const container = codeblock.parentNode.parentNode;
+
+        const copybutton = document.createElement('button');
+        copybutton.classList.add('copy-code');
+        copybutton.innerHTML = 'copy';
+
+        function copyingDone() {
+            copybutton.innerHTML = 'copied!';
+            setTimeout(() => {
+                copybutton.innerHTML = 'copy';
+            }, 2000);
+        }
+
+        copybutton.addEventListener('click', (cb) => {
+            if ('clipboard' in navigator) {
+                navigator.clipboard.writeText(codeblock.textContent);
+                copyingDone();
+                return;
+            }
+
+            const range = document.createRange();
+            range.selectNodeContents(codeblock);
+            const selection = window.getSelection();
+            selection.removeAllRanges();
+            selection.addRange(range);
+            try {
+                document.execCommand('copy');
+                copyingDone();
+            } catch (e) { };
+            selection.removeRange(range);
+        });
+
+        if (container.classList.contains("highlight")) {
+            container.appendChild(copybutton);
+        } else if (container.parentNode.firstChild == container) {
+            
+        } else if (codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.nodeName == "TABLE") {
+            
+            codeblock.parentNode.parentNode.parentNode.parentNode.parentNode.appendChild(copybutton);
+        } else {
+            
+            codeblock.parentNode.appendChild(copybutton);
+        }
+    });
+</script>
+</body>
+
+</html>
