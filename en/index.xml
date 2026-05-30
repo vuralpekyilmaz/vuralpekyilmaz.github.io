@@ -1,52 +1,5 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/">
-  <channel>
-    <title></title>
-    <link>https://vuralpekyilmaz.github.io/en/</link>
-    <description>Recent content on </description>
-    <generator>Hugo</generator>
-    <language>en</language>
-    <lastBuildDate>Fri, 15 May 2026 11:20:00 +0300</lastBuildDate>
-    <atom:link href="https://vuralpekyilmaz.github.io/en/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Account Position Calculator USDTRY</title>
-      <link>https://vuralpekyilmaz.github.io/en/posts/account-position-calculator-usdtry/</link>
-      <pubDate>Fri, 15 May 2026 11:20:00 +0300</pubDate>
-      <guid>https://vuralpekyilmaz.github.io/en/posts/account-position-calculator-usdtry/</guid>
-      <description>In financial markets, for investors engaged in leveraged trading, accurately reporting account positions is of critical importance.</description>
-    </item>
-    <item>
-      <title>Second Article</title>
-      <link>https://vuralpekyilmaz.github.io/en/posts/second-post/</link>
-      <pubDate>Mon, 11 May 2026 11:30:00 +0300</pubDate>
-      <guid>https://vuralpekyilmaz.github.io/en/posts/second-post/</guid>
-      <description>&lt;p&gt;Hello again! This is my second English demo article.&lt;br&gt;
-Here I continue experimenting with Hugo’s multi‑language setup and PaperMod theme.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>First Article</title>
-      <link>https://vuralpekyilmaz.github.io/en/posts/first-post/</link>
-      <pubDate>Sun, 10 May 2026 11:30:00 +0300</pubDate>
-      <guid>https://vuralpekyilmaz.github.io/en/posts/first-post/</guid>
-      <description>&lt;p&gt;Hello! This is my first English demo article.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>About Me</title>
-      <link>https://vuralpekyilmaz.github.io/en/about/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://vuralpekyilmaz.github.io/en/about/</guid>
-      <description>&lt;h1 id=&#34;-hi-there-im-vural-pekyilmaz&#34;&gt;👋 Hi there, I&amp;rsquo;m Vural Pekyilmaz&lt;/h1&gt;
-&lt;p&gt;&lt;a href=&#34;https://git.io/typing-svg&#34;&gt;&lt;img alt=&#34;Typing SVG&#34; loading=&#34;lazy&#34; src=&#34;https://readme-typing-svg.herokuapp.com?font=Fira+Code&amp;pause=1000&amp;width=435&amp;lines=Automated+technical+analysis+;and+trading+operations%2C;MetaTrader+5%2C+MQL5&#34;&gt;&lt;/a&gt;&lt;/p&gt;
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom" xmlns:content="http://purl.org/rss/1.0/modules/content/"><channel><title/><link>https://vuralpekyilmaz.github.io/en/</link><description>Recent content on</description><generator>Hugo</generator><language>en</language><lastBuildDate>Sat, 30 May 2026 16:10:00 +0300</lastBuildDate><atom:link href="https://vuralpekyilmaz.github.io/en/index.xml" rel="self" type="application/rss+xml"/><item><title>Account Spread &amp; Profit Calculator EURUSD</title><link>https://vuralpekyilmaz.github.io/en/posts/account-spread-profit-calculator-eurusd/</link><pubDate>Sat, 30 May 2026 16:10:00 +0300</pubDate><guid>https://vuralpekyilmaz.github.io/en/posts/account-spread-profit-calculator-eurusd/</guid><description>In financial markets, for investors engaged in leveraged trading, accurately reporting spread Profit is of critical importance.</description></item><item><title>Account Position Calculator EURUSD</title><link>https://vuralpekyilmaz.github.io/en/posts/account-position-calculator-eurusd/</link><pubDate>Fri, 29 May 2026 16:20:00 +0300</pubDate><guid>https://vuralpekyilmaz.github.io/en/posts/account-position-calculator-eurusd/</guid><description>In financial markets, for investors engaged in leveraged trading, accurately reporting account positions is of critical importance.</description></item><item><title>Account Position Calculator USDTRY</title><link>https://vuralpekyilmaz.github.io/en/posts/account-position-calculator-usdtry/</link><pubDate>Fri, 15 May 2026 11:20:00 +0300</pubDate><guid>https://vuralpekyilmaz.github.io/en/posts/account-position-calculator-usdtry/</guid><description>In financial markets, for investors engaged in leveraged trading, accurately reporting account positions is of critical importance.</description></item><item><title>About Me</title><link>https://vuralpekyilmaz.github.io/en/about/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://vuralpekyilmaz.github.io/en/about/</guid><description>&lt;h1 id="-hi-there-im-vural-pekyilmaz"&gt;👋 Hi there, I&amp;rsquo;m Vural Pekyilmaz&lt;/h1&gt;
+&lt;p&gt;&lt;a href="https://git.io/typing-svg"&gt;&lt;img alt="Typing SVG" loading="lazy" src="https://readme-typing-svg.herokuapp.com?font=Fira+Code&amp;pause=1000&amp;width=435&amp;lines=Automated+technical+analysis+;and+trading+operations%2C;MetaTrader+5%2C+MQL5"&gt;&lt;/a&gt;&lt;/p&gt;
 &lt;p&gt;I am a software specialist with extensive experience in software development, financial technologies, blockchain, and algorithmic trading. Throughout my career, I have contributed to projects in electronic publishing, media technologies, and financial operations. My expertise covers smart contract development, cryptocurrency wallets, trading systems, large-scale data integrations, and financial applications.&lt;/p&gt;
-&lt;p&gt;My technical skills include Solidity, Web3, JSON-RPC integrations, node setups, real-time communication systems, advertising integration, and CRM development. In addition, I have comprehensive experience with the MetaTrader 5 (MT5) platform and MQL5 language, developing algorithmic trading scripts and Expert Advisors (EAs), margin and risk calculations, order management, and backtesting processes.&lt;/p&gt;</description>
-    </item>
-    <item>
-      <title>Home</title>
-      <link>https://vuralpekyilmaz.github.io/en/home/</link>
-      <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
-      <guid>https://vuralpekyilmaz.github.io/en/home/</guid>
-      <description>&lt;p&gt;I am a software specialist with extensive experience in software development, financial technologies, blockchain, and algorithmic trading. Throughout my career, I have contributed to projects in electronic publishing, media technologies, and financial operations. My expertise covers smart contract development, cryptocurrency wallets, trading systems, large-scale data integrations, and financial applications.&lt;/p&gt;
-&lt;p&gt;My technical skills include Solidity, Web3, JSON-RPC integrations, node setups, real-time communication systems, advertising integration, and CRM development. In addition, I have comprehensive experience with the MetaTrader 5 (MT5) platform and MQL5 language, developing algorithmic trading scripts and Expert Advisors (EAs), margin and risk calculations, order management, and backtesting processes.&lt;/p&gt;</description>
-    </item>
-  </channel>
-</rss>
+&lt;p&gt;My technical skills include Solidity, Web3, JSON-RPC integrations, node setups, real-time communication systems, advertising integration, and CRM development. In addition, I have comprehensive experience with the MetaTrader 5 (MT5) platform and MQL5 language, developing algorithmic trading scripts and Expert Advisors (EAs), margin and risk calculations, order management, and backtesting processes.&lt;/p&gt;</description></item><item><title>Home</title><link>https://vuralpekyilmaz.github.io/en/home/</link><pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate><guid>https://vuralpekyilmaz.github.io/en/home/</guid><description>&lt;p&gt;I am a software specialist with extensive experience in software development, financial technologies, blockchain, and algorithmic trading. Throughout my career, I have contributed to projects in electronic publishing, media technologies, and financial operations. My expertise covers smart contract development, cryptocurrency wallets, trading systems, large-scale data integrations, and financial applications.&lt;/p&gt;
+&lt;p&gt;My technical skills include Solidity, Web3, JSON-RPC integrations, node setups, real-time communication systems, advertising integration, and CRM development. In addition, I have comprehensive experience with the MetaTrader 5 (MT5) platform and MQL5 language, developing algorithmic trading scripts and Expert Advisors (EAs), margin and risk calculations, order management, and backtesting processes.&lt;/p&gt;</description></item></channel></rss>
